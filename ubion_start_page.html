@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>시작하기 — AI 역량진단 | UBION 디지털 교육센터</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="common.css">
+<style>
+/* ─── Start Page Overrides ─── */
+.page-hero { padding-bottom: 60px; }
+.page-hero::before { background: radial-gradient(circle, var(--teal-glow), transparent 70%); }
+.page-hero .sub { color: var(--teal-400); }
+.page-hero h1 .acc { background: linear-gradient(135deg, var(--teal-400), var(--teal-300)); }
+.page-hero > p { max-width: 600px; }
+.tab-bar { padding: 0 48px; position: relative; z-index: 2; }
+.tab-btn .tab-icon { font-size: 18px; }
+.tab-btn.active { background: var(--teal-500); border-color: var(--teal-500); color: var(--white); box-shadow: 0 4px 20px rgba(20,184,166,0.3); }
+.tab-panel { max-width: 960px; margin: 0 auto; padding: 0 48px 80px; }
+
+/* ─── Skill Tree ─── */
+.skill-picker { display: flex; gap: 12px; margin-bottom: 36px; flex-wrap: wrap; }
+.skill-job { padding: 10px 20px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.08); background: transparent; color: var(--slate-400); font-size: 13px; font-weight: 600; font-family: var(--font-b); cursor: pointer; transition: all .2s; }
+.skill-job:hover { border-color: rgba(139,92,246,0.3); color: var(--white); }
+.skill-job.active { background: var(--purple-500); border-color: var(--purple-500); color: var(--white); }
+.skill-grid { display: flex; flex-direction: column; gap: 16px; margin-bottom: 36px; }
+.skill-row { display: flex; align-items: center; gap: 16px; background: var(--navy-800); border: 1px solid rgba(255,255,255,0.06); border-radius: 14px; padding: 20px 24px; transition: border-color .2s; }
+.skill-row:hover { border-color: rgba(255,255,255,0.1); }
+.skill-name { width: 140px; flex-shrink: 0; font-size: 14px; font-weight: 600; color: var(--white); }
+.skill-bar-track { flex: 1; height: 8px; background: rgba(255,255,255,0.06); border-radius: 4px; overflow: hidden; }
+.skill-bar-fill { height: 100%; border-radius: 4px; transition: width .4s ease; width: 0; }
+.skill-level-btns { display: flex; gap: 6px; flex-shrink: 0; }
+.skill-level-btn { width: 36px; height: 36px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); background: transparent; color: var(--slate-500); font-size: 12px; font-weight: 700; cursor: pointer; transition: all .15s; font-family: var(--font-d); }
+.skill-level-btn:hover { border-color: rgba(255,255,255,0.2); color: var(--white); }
+.skill-level-btn.selected { border-color: var(--teal-500); background: var(--teal-500); color: var(--white); }
+.skill-result { background: var(--navy-800); border: 1px solid rgba(255,255,255,0.06); border-radius: 20px; padding: 36px; display: none; }
+.skill-result.show { display: block; animation: fadeUp .5s ease-out; }
+.skill-result h3 { font-family: var(--font-d); font-size: 22px; font-weight: 700; color: var(--white); margin-bottom: 8px; }
+.skill-result .summary { font-size: 15px; color: var(--slate-400); margin-bottom: 24px; line-height: 1.7; }
+.skill-radar { display: flex; gap: 32px; align-items: flex-start; flex-wrap: wrap; }
+.radar-chart { width: 280px; height: 280px; flex-shrink: 0; }
+.skill-recommendations { flex: 1; min-width: 280px; }
+.rec-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); border-radius: 12px; padding: 18px 20px; margin-bottom: 12px; transition: border-color .2s; }
+.rec-card:hover { border-color: rgba(20,184,166,0.3); }
+.rec-card .rec-label { font-size: 11px; font-weight: 600; letter-spacing: .5px; margin-bottom: 6px; }
+.rec-card .rec-label.weak { color: var(--red-400); }
+.rec-card .rec-label.strong { color: var(--green-400); }
+.rec-card .rec-title { font-size: 14px; font-weight: 600; color: var(--white); margin-bottom: 4px; }
+.rec-card .rec-desc { font-size: 12px; color: var(--slate-500); }
+.skill-cta { margin-top: 24px; text-align: center; }
+
+/* ─── Quick Quiz ─── */
+.quiz-container { max-width: 640px; margin: 0 auto; }
+.quiz-progress { display: flex; gap: 8px; margin-bottom: 36px; }
+.quiz-dot { flex: 1; height: 4px; border-radius: 2px; background: rgba(255,255,255,0.08); transition: background .3s; }
+.quiz-dot.done { background: var(--teal-500); }
+.quiz-dot.current { background: var(--teal-400); }
+.quiz-card { background: var(--navy-800); border: 1px solid rgba(255,255,255,0.06); border-radius: 20px; padding: 40px 36px; }
+.quiz-step { display: none; }
+.quiz-step.active { display: block; animation: fadeUp .4s ease-out; }
+.quiz-q-num { font-size: 12px; color: var(--teal-400); font-weight: 600; letter-spacing: 1px; margin-bottom: 12px; }
+.quiz-question { font-family: var(--font-d); font-size: 22px; font-weight: 700; color: var(--white); margin-bottom: 28px; line-height: 1.4; }
+.quiz-options { display: flex; flex-direction: column; gap: 10px; }
+.quiz-opt { padding: 16px 20px; border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; background: transparent; color: var(--slate-300); font-size: 15px; font-family: var(--font-b); cursor: pointer; transition: all .2s; text-align: left; display: flex; align-items: center; gap: 12px; }
+.quiz-opt:hover { border-color: rgba(20,184,166,0.3); background: rgba(20,184,166,0.04); }
+.quiz-opt.selected { border-color: var(--teal-500); background: rgba(20,184,166,0.08); color: var(--white); }
+.quiz-opt .opt-marker { width: 24px; height: 24px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.15); display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 12px; font-weight: 700; transition: all .2s; }
+.quiz-opt.selected .opt-marker { border-color: var(--teal-500); background: var(--teal-500); color: var(--white); }
+.quiz-nav { display: flex; justify-content: flex-end; margin-top: 24px; gap: 12px; }
+.quiz-next { padding: 12px 28px; border-radius: 10px; border: none; font-size: 14px; font-weight: 600; cursor: pointer; font-family: var(--font-b); transition: all .2s; }
+.quiz-next.primary { background: var(--teal-500); color: var(--white); }
+.quiz-next.primary:hover { background: var(--teal-400); }
+.quiz-next:disabled { opacity: 0.3; cursor: not-allowed; }
+.quiz-result { display: none; text-align: center; }
+.quiz-result.show { display: block; animation: fadeUp .5s ease-out; }
+.quiz-result-icon { font-size: 56px; margin-bottom: 20px; }
+.quiz-result h3 { font-family: var(--font-d); font-size: 26px; font-weight: 700; color: var(--white); margin-bottom: 12px; }
+.quiz-result .result-subtitle { font-size: 16px; color: var(--slate-400); margin-bottom: 32px; }
+.result-course { background: var(--navy-800); border: 1px solid rgba(20,184,166,0.2); border-radius: 16px; padding: 28px; text-align: left; margin-bottom: 16px; }
+.result-course .rc-tag { font-size: 11px; color: var(--teal-400); font-weight: 600; letter-spacing: .5px; margin-bottom: 8px; }
+.result-course h4 { font-size: 18px; font-weight: 700; color: var(--white); margin-bottom: 8px; }
+.result-course p { font-size: 13px; color: var(--slate-400); margin-bottom: 16px; line-height: 1.6; }
+.result-course .rc-footer { display: flex; justify-content: space-between; align-items: center; }
+.result-course .rc-price { font-size: 18px; font-weight: 700; color: var(--teal-400); }
+.result-course .rc-btn { padding: 10px 22px; border-radius: 8px; background: var(--teal-500); color: var(--white); border: none; font-size: 13px; font-weight: 600; cursor: pointer; font-family: var(--font-b); transition: background .2s; }
+.result-course .rc-btn:hover { background: var(--teal-400); }
+.quiz-retry { margin-top: 20px; padding: 12px 28px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1); background: transparent; color: var(--slate-400); font-size: 14px; font-weight: 500; cursor: pointer; font-family: var(--font-b); transition: all .2s; }
+.quiz-retry:hover { border-color: rgba(255,255,255,0.2); color: var(--white); }
+
+/* ─── Target Recommendation ─── */
+.target-selector { display: flex; gap: 16px; margin-bottom: 40px; }
+.target-opt { flex: 1; padding: 32px 24px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.06); background: var(--navy-800); cursor: pointer; transition: all .3s; text-align: center; }
+.target-opt:hover { border-color: rgba(255,255,255,0.12); transform: translateY(-2px); }
+.target-opt.active { transform: translateY(-4px); }
+.target-opt:nth-child(1).active { border-color: var(--teal-500); box-shadow: 0 4px 24px rgba(20,184,166,0.15); }
+.target-opt:nth-child(2).active { border-color: var(--blue-500); box-shadow: 0 4px 24px rgba(59,130,246,0.15); }
+.target-opt:nth-child(3).active { border-color: var(--amber-500); box-shadow: 0 4px 24px rgba(245,158,11,0.15); }
+.target-opt .t-emoji { font-size: 36px; margin-bottom: 12px; display: block; }
+.target-opt .t-title { font-size: 16px; font-weight: 700; color: var(--white); margin-bottom: 4px; }
+.target-opt .t-desc { font-size: 12px; color: var(--slate-500); }
+.target-detail { display: none; animation: fadeUp .5s ease-out; }
+.target-detail.show { display: block; }
+.target-detail-header { margin-bottom: 28px; }
+.target-detail-header h3 { font-family: var(--font-d); font-size: 24px; font-weight: 700; color: var(--white); margin-bottom: 8px; }
+.target-detail-header p { font-size: 15px; color: var(--slate-400); }
+.target-courses { display: flex; flex-direction: column; gap: 14px; }
+.tc-card { display: flex; align-items: center; gap: 20px; background: var(--navy-800); border: 1px solid rgba(255,255,255,0.06); border-radius: 14px; padding: 22px 24px; transition: all .2s; }
+.tc-card:hover { border-color: rgba(255,255,255,0.12); }
+.tc-icon { width: 52px; height: 52px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 24px; flex-shrink: 0; }
+.tc-info { flex: 1; }
+.tc-info .tc-tag { font-size: 11px; font-weight: 600; letter-spacing: .5px; margin-bottom: 4px; }
+.tc-info h4 { font-size: 16px; font-weight: 700; color: var(--white); margin-bottom: 4px; }
+.tc-info p { font-size: 12px; color: var(--slate-500); }
+.tc-action { flex-shrink: 0; }
+.tc-btn { padding: 10px 20px; border-radius: 8px; border: none; font-size: 13px; font-weight: 600; cursor: pointer; font-family: var(--font-b); transition: all .2s; color: var(--white); }
+.tc-btn:hover { transform: translateY(-1px); }
+</style>
+</head>
+<body>
+
+<!-- GNB -->
+<nav class="gnb">
+  <a href="index.html" class="gnb-logo"><em>UBION</em> 디지털 교육센터</a>
+  <ul class="gnb-menu">
+    <li><a href="ubion_start_page.html" class="active">시작하기</a></li>
+    <li><a href="ubion_courses_page.html">교육과정</a></li>
+    <li><a href="ubion_career_page.html">커리어</a></li>
+    <li><a href="ubion_community_page.html">커뮤니티</a></li>
+    <li><a href="ubion_news_center.html">소식·센터</a></li>
+  </ul>
+  <button class="gnb-cta" onclick="location.href='ubion_start_page.html'">무료 진단하기</button>
+</nav>
+
+<!-- Hero -->
+<section class="page-hero">
+  <div class="sub">AI / 빅데이터 역량 진단</div>
+  <h1>나에게 맞는 <span class="acc">진단 방식</span>을 선택하세요</h1>
+  <p>스킬트리를 직접 평가하거나, 1분 퀵 진단으로 추천받거나, 대상별 맞춤 과정을 확인하세요.</p>
+</section>
+
+<!-- Tab Bar -->
+<div class="tab-bar">
+  <button class="tab-btn active" onclick="switchTab(0)"><span class="tab-icon">🌳</span> 스킬트리 자가진단</button>
+  <button class="tab-btn" onclick="switchTab(1)"><span class="tab-icon">⚡</span> 1분 퀵 진단</button>
+  <button class="tab-btn" onclick="switchTab(2)"><span class="tab-icon">🎯</span> 대상별 맞춤 추천</button>
+</div>
+
+<!-- ═══ TAB 1: Skill Tree ═══ -->
+<div class="tab-panel active" id="panel-0">
+  <p style="font-size:14px;color:var(--slate-400);margin-bottom:20px">목표 직무를 선택하면 핵심 스킬 항목이 표시됩니다. 각 스킬의 숙련도(1~5)를 평가해 보세요.</p>
+  <div class="skill-picker">
+    <button class="skill-job active" onclick="pickJob(0)">📊 데이터 분석가</button>
+    <button class="skill-job" onclick="pickJob(1)">🤖 프롬프트 엔지니어</button>
+    <button class="skill-job" onclick="pickJob(2)">💰 핀테크 전문가</button>
+  </div>
+  <div class="skill-grid" id="skill-grid"></div>
+  <div style="text-align:center">
+    <button class="btn-primary" onclick="showSkillResult()" id="skill-submit-btn" disabled>진단 결과 보기</button>
+  </div>
+  <div class="skill-result" id="skill-result">
+    <h3 id="sr-title"></h3>
+    <p class="summary" id="sr-summary"></p>
+    <div class="skill-radar">
+      <canvas id="radar-canvas" class="radar-chart" width="280" height="280"></canvas>
+      <div class="skill-recommendations" id="sr-recs"></div>
+    </div>
+    <div class="skill-cta">
+      <a href="ubion_courses_page.html" class="btn-primary" style="margin-top:20px">📖 추천 과정 상세보기</a>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ TAB 2: Quick Quiz ═══ -->
+<div class="tab-panel" id="panel-1">
+  <div class="quiz-container">
+    <div class="quiz-progress" id="quiz-progress">
+      <div class="quiz-dot current"></div>
+      <div class="quiz-dot"></div>
+      <div class="quiz-dot"></div>
+      <div class="quiz-dot"></div>
+    </div>
+    <div class="quiz-card">
+      <div id="quiz-steps"></div>
+    </div>
+    <div class="quiz-result" id="quiz-result"></div>
+  </div>
+</div>
+
+<!-- ═══ TAB 3: Target Recommendation ═══ -->
+<div class="tab-panel" id="panel-2">
+  <div class="target-selector">
+    <div class="target-opt" onclick="pickTarget(0)">
+      <span class="t-emoji">🌱</span>
+      <div class="t-title">취업 준비생 · 학생</div>
+      <div class="t-desc">포트폴리오 완성 → 취업</div>
+    </div>
+    <div class="target-opt" onclick="pickTarget(1)">
+      <span class="t-emoji">💼</span>
+      <div class="t-title">재직자 · 실무자</div>
+      <div class="t-desc">업무 AI 활용 스킬업</div>
+    </div>
+    <div class="target-opt" onclick="pickTarget(2)">
+      <span class="t-emoji">🏢</span>
+      <div class="t-title">기업 교육 담당자</div>
+      <div class="t-desc">조직 맞춤 DX 교육</div>
+    </div>
+  </div>
+  <div id="target-details"></div>
+</div>
+
+<!-- Footer -->
+<footer class="footer">
+  <p>© 2026 UBION AI Education Center. All rights reserved. · <a href="#">개인정보처리방침</a> · <a href="#">이용약관</a></p>
+  <p style="margin-top:8px">📍 서울 구로구 디지털로32나길 22 4,5층 · 📞 1588-1381 (평일 09:00~18:00)</p>
+</footer>
+
+<script src="common.js"></script>
+<script>
+// ─── SKILL TREE ───
+const jobData = [
+  { name:'데이터 분석가', skills:['Python 기초','Pandas/NumPy','SQL 쿼리','데이터 시각화','통계 분석','머신러닝 기초'] },
+  { name:'프롬프트 엔지니어', skills:['ChatGPT 활용','프롬프트 설계','LLM 이해','API 연동','자동화 워크플로우','평가/최적화'] },
+  { name:'핀테크 전문가', skills:['금융 데이터 이해','Python 기초','리스크 분석','데이터 시각화','SQL 쿼리','규제/컴플라이언스'] }
+];
+const skillColors = ['#14B8A6','#8B5CF6','#3B82F6','#F59E0B','#F97316','#EF4444'];
+let currentJob = 0;
+let skillLevels = {};
+
+function pickJob(idx) {
+  currentJob = idx;
+  skillLevels = {};
+  document.querySelectorAll('.skill-job').forEach((b,i)=>b.classList.toggle('active',i===idx));
+  document.getElementById('skill-result').classList.remove('show');
+  document.getElementById('skill-submit-btn').disabled = true;
+  renderSkills();
+}
+
+function renderSkills() {
+  const grid = document.getElementById('skill-grid');
+  const skills = jobData[currentJob].skills;
+  grid.innerHTML = skills.map((s,i) => `
+    <div class="skill-row">
+      <div class="skill-name">${s}</div>
+      <div class="skill-bar-track"><div class="skill-bar-fill" id="bar-${i}" style="background:${skillColors[i]}"></div></div>
+      <div class="skill-level-btns">
+        ${[1,2,3,4,5].map(l=>`<button class="skill-level-btn" onclick="setLevel(${i},${l})">${l}</button>`).join('')}
+      </div>
+    </div>
+  `).join('');
+}
+
+function setLevel(skillIdx, level) {
+  skillLevels[skillIdx] = level;
+  const row = document.querySelectorAll('.skill-row')[skillIdx];
+  row.querySelectorAll('.skill-level-btn').forEach((b,i)=>b.classList.toggle('selected',i<level));
+  document.getElementById('bar-'+skillIdx).style.width = (level*20)+'%';
+  const allSet = jobData[currentJob].skills.length === Object.keys(skillLevels).length;
+  document.getElementById('skill-submit-btn').disabled = !allSet;
+}
+
+function showSkillResult() {
+  const skills = jobData[currentJob].skills;
+  const levels = skills.map((_,i) => skillLevels[i] || 0);
+  const avg = levels.reduce((a,b)=>a+b,0)/levels.length;
+  const weakest = levels.indexOf(Math.min(...levels));
+  const strongest = levels.indexOf(Math.max(...levels));
+
+  document.getElementById('sr-title').textContent =
+    avg >= 4 ? '🎉 이미 실력자이시군요!' :
+    avg >= 2.5 ? '💪 기초는 갖추셨네요, 한 단계 더!' :
+    '🌱 시작이 반! 체계적으로 성장할 차례입니다.';
+
+  document.getElementById('sr-summary').textContent =
+    `${jobData[currentJob].name} 직무의 6개 핵심 역량 평균 숙련도는 ${avg.toFixed(1)}/5 입니다. ` +
+    `가장 보완이 필요한 영역은 "${skills[weakest]}"이며, "${skills[strongest]}"은(는) 강점입니다.`;
+
+  drawRadar(levels, skills);
+
+  const recs = document.getElementById('sr-recs');
+  const sorted = levels.map((l,i)=>({l,i})).sort((a,b)=>a.l-b.l);
+  recs.innerHTML = `
+    <div class="rec-card">
+      <div class="rec-label weak">▼ 보완 필요</div>
+      <div class="rec-title">${skills[sorted[0].i]}</div>
+      <div class="rec-desc">현재 ${sorted[0].l}/5 — 이 영역을 집중 학습하면 직무 역량이 크게 향상됩니다.</div>
+    </div>
+    <div class="rec-card">
+      <div class="rec-label weak">▼ 보완 필요</div>
+      <div class="rec-title">${skills[sorted[1].i]}</div>
+      <div class="rec-desc">현재 ${sorted[1].l}/5 — 기초 과정부터 차근차근 채워보세요.</div>
+    </div>
+    <div class="rec-card">
+      <div class="rec-label strong">▲ 강점</div>
+      <div class="rec-title">${skills[sorted[sorted.length-1].i]}</div>
+      <div class="rec-desc">현재 ${sorted[sorted.length-1].l}/5 — 이 강점을 살린 프로젝트로 포트폴리오를 만들어 보세요.</div>
+    </div>
+  `;
+
+  document.getElementById('skill-result').classList.add('show');
+  document.getElementById('skill-result').scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+function drawRadar(levels, labels) {
+  const canvas = document.getElementById('radar-canvas');
+  const ctx = canvas.getContext('2d');
+  const W = 280, H = 280, cx = W/2, cy = H/2, R = 100;
+  ctx.clearRect(0,0,W,H);
+  const n = levels.length;
+  const angleStep = (Math.PI*2)/n;
+  for (let ring=1; ring<=5; ring++) {
+    const r = R*ring/5;
+    ctx.beginPath();
+    for (let i=0;i<=n;i++) {
+      const a = -Math.PI/2 + i*angleStep;
+      const x=cx+r*Math.cos(a), y=cy+r*Math.sin(a);
+      i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
+    }
+    ctx.strokeStyle='rgba(255,255,255,0.06)';ctx.lineWidth=1;ctx.stroke();
+  }
+  for (let i=0;i<n;i++) {
+    const a=-Math.PI/2+i*angleStep;
+    ctx.beginPath();ctx.moveTo(cx,cy);
+    ctx.lineTo(cx+R*Math.cos(a),cy+R*Math.sin(a));
+    ctx.strokeStyle='rgba(255,255,255,0.06)';ctx.stroke();
+  }
+  ctx.beginPath();
+  levels.forEach((l,i)=>{
+    const a=-Math.PI/2+i*angleStep, r=R*l/5;
+    const x=cx+r*Math.cos(a), y=cy+r*Math.sin(a);
+    i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
+  });
+  ctx.closePath();
+  ctx.fillStyle='rgba(20,184,166,0.15)';ctx.fill();
+  ctx.strokeStyle='#14B8A6';ctx.lineWidth=2;ctx.stroke();
+  levels.forEach((l,i)=>{
+    const a=-Math.PI/2+i*angleStep, r=R*l/5;
+    ctx.beginPath();ctx.arc(cx+r*Math.cos(a),cy+r*Math.sin(a),4,0,Math.PI*2);
+    ctx.fillStyle='#14B8A6';ctx.fill();
+  });
+  ctx.font='500 11px "Noto Sans KR"';ctx.fillStyle='#94A3B8';ctx.textAlign='center';
+  labels.forEach((label,i)=>{
+    const a=-Math.PI/2+i*angleStep, r=R+22;
+    let x=cx+r*Math.cos(a), y=cy+r*Math.sin(a)+4;
+    ctx.fillText(label,x,y);
+  });
+}
+
+renderSkills();
+
+// ─── QUICK QUIZ ───
+const quizData = [
+  { q:'현재 코딩 경험이 어느 정도인가요?', opts:['전혀 없음 (완전 비전공자)','간단한 엑셀 함수 정도','Python/SQL 기초 학습 경험 있음','실무에서 코드를 작성해본 적 있음'] },
+  { q:'AI/데이터를 배우는 가장 큰 목적은?', opts:['취업 및 이직 준비','현재 업무에 AI 도구 활용','자격증 취득 (ADsP, SQLD 등)','창업/사이드 프로젝트'] },
+  { q:'교육에 투자할 수 있는 기간은?', opts:['1~2주 단기 집중','1~3개월 중기','4~6개월 장기 (국비과정)','주말/저녁 시간만 가능'] },
+  { q:'가장 관심 있는 분야는?', opts:['데이터 분석 / 시각화','생성형 AI (ChatGPT 등) 활용','금융/핀테크 데이터','웹개발 / AI 서비스 개발'] }
+];
+let quizAnswers = [];
+let quizStep = 0;
+
+function renderQuiz() {
+  const container = document.getElementById('quiz-steps');
+  container.innerHTML = quizData.map((q,qi) => `
+    <div class="quiz-step ${qi===0?'active':''}">
+      <div class="quiz-q-num">Q${qi+1} / ${quizData.length}</div>
+      <div class="quiz-question">${q.q}</div>
+      <div class="quiz-options">
+        ${q.opts.map((o,oi)=>`
+          <button class="quiz-opt" onclick="selectQuizOpt(${qi},${oi})">
+            <span class="opt-marker">${String.fromCharCode(65+oi)}</span>
+            ${o}
+          </button>
+        `).join('')}
+      </div>
+      <div class="quiz-nav">
+        <button class="quiz-next primary" id="quiz-next-${qi}" onclick="nextQuiz(${qi})" disabled>
+          ${qi===quizData.length-1?'결과 보기':'다음 →'}
+        </button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function selectQuizOpt(qIdx, oIdx) {
+  quizAnswers[qIdx] = oIdx;
+  const step = document.querySelectorAll('.quiz-step')[qIdx];
+  step.querySelectorAll('.quiz-opt').forEach((b,i)=>b.classList.toggle('selected',i===oIdx));
+  document.getElementById('quiz-next-'+qIdx).disabled = false;
+}
+
+function nextQuiz(qIdx) {
+  if (qIdx === quizData.length-1) { showQuizResult(); return; }
+  quizStep = qIdx+1;
+  document.querySelectorAll('.quiz-step').forEach((s,i)=>s.classList.toggle('active',i===quizStep));
+  const dots = document.querySelectorAll('.quiz-dot');
+  dots.forEach((d,i)=>{
+    d.className='quiz-dot';
+    if(i<quizStep) d.classList.add('done');
+    if(i===quizStep) d.classList.add('current');
+  });
+}
+
+function showQuizResult() {
+  document.querySelector('.quiz-card').style.display='none';
+  document.querySelector('.quiz-progress').style.display='none';
+  const r = document.getElementById('quiz-result');
+  const coding = quizAnswers[0]||0;
+  const purpose = quizAnswers[1]||0;
+  const duration = quizAnswers[2]||0;
+  let course, tag, desc, price;
+  if (duration >= 2 && coding <= 1) {
+    course='빅데이터를 활용한 디지털금융 전문가 과정';
+    tag='#K-Digital Training · 국비지원';
+    desc='비전공자도 6개월간 Python, SQL, 데이터 분석, 머신러닝까지 체계적으로 배울 수 있는 장기 과정입니다. 포트폴리오 + 취업 컨설팅까지 지원합니다.';
+    price='0원 (전액 국비지원)';
+  } else if (purpose === 1 || duration <= 1) {
+    course='생성형 AI (ChatGPT) 업무 자동화 마스터';
+    tag='#단기 마스터클래스 · 내일배움카드';
+    desc='2주 집중 과정으로 ChatGPT, Copilot 등 생성형 AI를 실무에 바로 활용하는 방법을 배웁니다. 프롬프트 엔지니어링부터 업무 자동화까지.';
+    price='내일배움카드 지원 적용시 환급';
+  } else {
+    course='빅데이터를 활용한 디지털금융 전문가 과정';
+    tag='#K-Digital Training · 국비지원';
+    desc='데이터 분석의 기초부터 실전 프로젝트까지, 금융 도메인에 특화된 빅데이터 전문가로 성장할 수 있습니다.';
+    price='0원 (전액 국비지원)';
+  }
+  r.innerHTML = `
+    <div class="quiz-result-icon">🎯</div>
+    <h3>당신에게 딱 맞는 과정을 찾았습니다!</h3>
+    <p class="result-subtitle">답변 분석 결과, 아래 과정을 추천드립니다.</p>
+    <div class="result-course">
+      <div class="rc-tag">${tag}</div>
+      <h4>${course}</h4>
+      <p>${desc}</p>
+      <div class="rc-footer">
+        <span class="rc-price">${price}</span>
+        <button class="rc-btn">수강신청 하러가기</button>
+      </div>
+    </div>
+    <button class="quiz-retry" onclick="resetQuiz()">↻ 다시 진단하기</button>
+  `;
+  r.classList.add('show');
+}
+
+function resetQuiz() {
+  quizStep=0; quizAnswers=[];
+  document.querySelector('.quiz-card').style.display='';
+  document.querySelector('.quiz-progress').style.display='';
+  document.getElementById('quiz-result').classList.remove('show');
+  document.getElementById('quiz-result').innerHTML='';
+  renderQuiz();
+  const dots=document.querySelectorAll('.quiz-dot');
+  dots.forEach((d,i)=>{d.className='quiz-dot';if(i===0)d.classList.add('current')});
+}
+
+renderQuiz();
+
+// ─── TARGET RECOMMENDATION ───
+const targetData = [
+  {
+    emoji:'🌱', title:'취업 준비생을 위한 추천 과정',
+    desc:'비전공자도 6개월이면 데이터 분석가로 취업할 수 있습니다. 100% 국비지원으로 비용 부담 제로.',
+    courses:[
+      {icon:'📊',iconBg:'rgba(20,184,166,0.1)',tag:'K-Digital Training',tagColor:'var(--teal-400)',name:'빅데이터를 활용한 디지털금융 전문가 과정',desc:'6개월 · 전액 국비지원 · 포트폴리오 완성',btnBg:'var(--teal-500)',btnHover:'var(--teal-400)'},
+      {icon:'🧠',iconBg:'rgba(139,92,246,0.1)',tag:'자격증 대비',tagColor:'var(--purple-400)',name:'ADsP + SQLD 자격증 취득 준비반',desc:'4주 집중 · 기출 분석 · 합격 보장 프로그램',btnBg:'var(--purple-500)',btnHover:'var(--purple-400)'},
+      {icon:'💼',iconBg:'rgba(59,130,246,0.1)',tag:'취업 연계',tagColor:'var(--blue-400)',name:'1:1 포트폴리오 클리닉 + 면접 코칭',desc:'수료 후 전담 매니저 배정 · MOU 기업 연계',btnBg:'var(--blue-500)',btnHover:'var(--blue-400)'}
+    ]
+  },
+  {
+    emoji:'💼', title:'재직자를 위한 추천 과정',
+    desc:'야근 없는 실무를 만드는 AI 자동화. 내일배움카드로 수강료 환급.',
+    courses:[
+      {icon:'🤖',iconBg:'rgba(245,158,11,0.1)',tag:'단기 마스터클래스',tagColor:'var(--amber-400)',name:'생성형 AI (ChatGPT) 업무 자동화 마스터',desc:'2주 · 내일배움카드 지원 · 야간/주말반',btnBg:'var(--amber-500)',btnHover:'var(--amber-400)'},
+      {icon:'📈',iconBg:'rgba(20,184,166,0.1)',tag:'실무 활용',tagColor:'var(--teal-400)',name:'Excel → Python 데이터 분석 전환 과정',desc:'4주 · 비전공 재직자 특화 커리큘럼',btnBg:'var(--teal-500)',btnHover:'var(--teal-400)'},
+      {icon:'⚡',iconBg:'rgba(139,92,246,0.1)',tag:'업스킬링',tagColor:'var(--purple-400)',name:'업무 보고서 AI 자동 생성 워크숍',desc:'1일 · 실습 중심 · 결과물 즉시 활용 가능',btnBg:'var(--purple-500)',btnHover:'var(--purple-400)'}
+    ]
+  },
+  {
+    emoji:'🏢', title:'기업 교육을 위한 맞춤 솔루션',
+    desc:'조직 규모와 목표에 맞는 커스텀 DX 교육 프로그램을 설계합니다.',
+    courses:[
+      {icon:'🏗️',iconBg:'rgba(59,130,246,0.1)',tag:'맞춤 설계',tagColor:'var(--blue-400)',name:'기업 맞춤형 AI/DX 교육 프로그램',desc:'조직 진단 → 커리큘럼 설계 → 강사 배정',btnBg:'var(--blue-500)',btnHover:'var(--blue-400)'},
+      {icon:'👥',iconBg:'rgba(245,158,11,0.1)',tag:'그룹 교육',tagColor:'var(--amber-400)',name:'부서별 AI 리터러시 워크숍',desc:'반일/전일 · 20~50인 그룹 · 실습 포함',btnBg:'var(--amber-500)',btnHover:'var(--amber-400)'},
+      {icon:'📞',iconBg:'rgba(20,184,166,0.1)',tag:'상담 예약',tagColor:'var(--teal-400)',name:'무료 교육 컨설팅 상담',desc:'니즈 파악 → 견적 → 시범 강의 제공',btnBg:'var(--teal-500)',btnHover:'var(--teal-400)'}
+    ]
+  }
+];
+
+function pickTarget(idx) {
+  document.querySelectorAll('.target-opt').forEach((o,i)=>o.classList.toggle('active',i===idx));
+  const d = targetData[idx];
+  const container = document.getElementById('target-details');
+  container.innerHTML = `
+    <div class="target-detail show">
+      <div class="target-detail-header">
+        <h3>${d.emoji} ${d.title}</h3>
+        <p>${d.desc}</p>
+      </div>
+      <div class="target-courses">
+        ${d.courses.map(c=>`
+          <div class="tc-card">
+            <div class="tc-icon" style="background:${c.iconBg}">${c.icon}</div>
+            <div class="tc-info">
+              <div class="tc-tag" style="color:${c.tagColor}">${c.tag}</div>
+              <h4>${c.name}</h4>
+              <p>${c.desc}</p>
+            </div>
+            <div class="tc-action">
+              <button class="tc-btn" style="background:${c.btnBg}" onmouseover="this.style.background='${c.btnHover}'" onmouseout="this.style.background='${c.btnBg}'">상세보기</button>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  `;
+}
+</script>
+</body>
+</html>

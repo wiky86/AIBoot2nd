@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>소식·센터 | UBION AI 디지털 교육센터</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="common.css">
+<style>
+/* ─── News Center Overrides ─── */
+.page-hero::before { background: radial-gradient(circle, rgba(100,116,139,0.1), transparent 70%); }
+.page-hero .sub { color: var(--slate-400); }
+.page-hero h1 .acc { background: linear-gradient(135deg, var(--slate-300), var(--teal-400)); }
+.tab-btn.active { background: var(--slate-500); border-color: var(--slate-500); color: var(--white); box-shadow: 0 4px 20px rgba(100,116,139,0.3); }
+
+/* News List */
+.section-title { font-family: var(--font-d); font-size: 22px; font-weight: 700; color: var(--white); margin-bottom: 24px; display: flex; align-items: center; gap: 8px; }
+.news-list { display: flex; flex-direction: column; gap: 12px; margin-bottom: 32px; }
+.news-item { display: flex; align-items: center; gap: 16px; padding: 20px 24px; background: var(--navy-800); border: 1px solid rgba(255,255,255,0.06); border-radius: 14px; transition: all .2s; cursor: pointer; text-decoration: none; }
+.news-item:hover { border-color: rgba(255,255,255,0.12); transform: translateX(4px); }
+.ni-badge { padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: 700; flex-shrink: 0; min-width: 60px; text-align: center; }
+.ni-badge.notice { background: rgba(59,130,246,0.1); color: var(--blue-400); }
+.ni-badge.event { background: rgba(245,158,11,0.1); color: var(--amber-400); }
+.ni-badge.update { background: rgba(20,184,166,0.1); color: var(--teal-400); }
+.ni-badge.press { background: rgba(139,92,246,0.1); color: var(--purple-400); }
+.ni-badge.youtube { background: rgba(239,68,68,0.1); color: var(--red-400); }
+.ni-title { flex: 1; font-size: 14px; font-weight: 600; color: var(--white); }
+.ni-date { font-size: 12px; color: var(--slate-500); flex-shrink: 0; }
+.ni-new { font-size: 10px; font-weight: 700; color: var(--red-400); margin-left: 8px; }
+.news-more { text-align: center; }
+.news-more-btn { padding: 12px 28px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1); background: transparent; color: var(--slate-400); font-size: 14px; font-weight: 500; cursor: pointer; font-family: var(--font-b); transition: all .2s; }
+.news-more-btn:hover { border-color: rgba(255,255,255,0.2); color: var(--white); }
+
+/* Location */
+.location-grid { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 24px; margin-bottom: 32px; }
+.map-placeholder { width: 100%; height: 320px; border-radius: 16px; background: var(--navy-700); border: 1px solid rgba(255,255,255,0.06); display: flex; align-items: center; justify-content: center; color: var(--slate-500); font-size: 14px; flex-direction: column; gap: 8px; }
+.map-placeholder .mp-icon { font-size: 48px; opacity: 0.4; }
+.location-info { display: flex; flex-direction: column; gap: 12px; }
+.li-card { padding: 20px; background: var(--navy-800); border: 1px solid rgba(255,255,255,0.06); border-radius: 14px; }
+.li-card .li-label { font-size: 11px; color: var(--slate-500); font-weight: 600; letter-spacing: .5px; margin-bottom: 6px; }
+.li-card .li-value { font-size: 14px; color: var(--white); font-weight: 500; line-height: 1.5; }
+.li-card .li-value a { color: var(--teal-400); text-decoration: none; }
+.li-card .li-value a:hover { text-decoration: underline; }
+
+/* FAQ */
+.faq-list { display: flex; flex-direction: column; gap: 10px; }
+.faq-item { background: var(--navy-800); border: 1px solid rgba(255,255,255,0.06); border-radius: 14px; overflow: hidden; transition: border-color .2s; }
+.faq-item.open { border-color: rgba(20,184,166,0.2); }
+.faq-q { display: flex; align-items: center; justify-content: space-between; padding: 20px 24px; cursor: pointer; transition: background .2s; }
+.faq-q:hover { background: rgba(255,255,255,0.02); }
+.faq-q .fq-text { font-size: 15px; font-weight: 600; color: var(--white); display: flex; align-items: center; gap: 10px; }
+.faq-q .fq-badge { font-size: 12px; font-weight: 700; color: var(--teal-400); }
+.faq-q .fq-arrow { font-size: 18px; color: var(--slate-500); transition: transform .3s; }
+.faq-item.open .fq-arrow { transform: rotate(180deg); }
+.faq-a { display: none; padding: 0 24px 20px; font-size: 14px; color: var(--slate-400); line-height: 1.7; border-top: 1px solid rgba(255,255,255,0.04); padding-top: 16px; }
+.faq-item.open .faq-a { display: block; animation: fadeUp .3s ease-out; }
+.faq-a strong { color: var(--white); font-weight: 600; }
+.footer { margin-top: 40px; }
+</style>
+</head>
+<body>
+
+<nav class="gnb">
+  <a href="index.html" class="gnb-logo"><em>UBION</em> 디지털 교육센터</a>
+  <ul class="gnb-menu">
+    <li><a href="ubion_start_page.html">시작하기</a></li>
+    <li><a href="ubion_courses_page.html">교육과정</a></li>
+    <li><a href="ubion_career_page.html">커리어</a></li>
+    <li><a href="ubion_community_page.html">커뮤니티</a></li>
+    <li><a href="ubion_news_center.html" class="active">소식·센터</a></li>
+  </ul>
+  <button class="gnb-cta" onclick="location.href='ubion_start_page.html'">무료 진단하기</button>
+</nav>
+
+<section class="page-hero">
+  <div class="sub">NEWS & CENTER</div>
+  <h1><span class="acc">소식</span>과 센터 안내</h1>
+  <p>공지사항, 언론보도, 센터 위치 안내와 자주 묻는 질문을 확인하세요.</p>
+</section>
+
+<div class="content">
+  <div class="tab-bar">
+    <button class="tab-btn active" onclick="switchTab(0)">📢 공지·보도</button>
+    <button class="tab-btn" onclick="switchTab(1)">📍 오시는 길</button>
+    <button class="tab-btn" onclick="switchTab(2)">❓ FAQ</button>
+  </div>
+
+  <!-- TAB 1: News -->
+  <div class="tab-panel active" id="panel-0">
+    <div class="section-title">📌 공지사항</div>
+    <div class="news-list">
+      <a class="news-item" href="#"><span class="ni-badge notice">공지</span><span class="ni-title">[필독] 2026년 K-Digital Training 5기 수강신청 안내<span class="ni-new">NEW</span></span><span class="ni-date">2026.03.20</span></a>
+      <a class="news-item" href="#"><span class="ni-badge event">이벤트</span><span class="ni-title">수강 후기 작성 이벤트 — 스타벅스 기프티콘 증정<span class="ni-new">NEW</span></span><span class="ni-date">2026.03.15</span></a>
+      <a class="news-item" href="#"><span class="ni-badge update">업데이트</span><span class="ni-title">2026년 1분기 커리큘럼 업데이트 안내 (ChatGPT 특강 추가)</span><span class="ni-date">2026.03.10</span></a>
+      <a class="news-item" href="#"><span class="ni-badge notice">공지</span><span class="ni-title">훈련 장려금 신청 방법 변경 안내</span><span class="ni-date">2026.02.28</span></a>
+      <a class="news-item" href="#"><span class="ni-badge event">이벤트</span><span class="ni-title">AI Wordle 연속 7일 달성 챌린지 — 문화상품권 증정</span><span class="ni-date">2026.02.20</span></a>
+    </div>
+    <div class="section-title">📰 언론보도 & 유튜브</div>
+    <div class="news-list">
+      <a class="news-item" href="#"><span class="ni-badge press">보도</span><span class="ni-title">[한국경제] "유비온 AI 교육센터, K-Digital Training 우수 훈련기관 선정"</span><span class="ni-date">2026.03.05</span></a>
+      <a class="news-item" href="#"><span class="ni-badge youtube">영상</span><span class="ni-title">[YouTube] 비전공자 데이터 분석가 취업 브이로그 (심*혁 수료생)</span><span class="ni-date">2026.02.18</span></a>
+      <a class="news-item" href="#"><span class="ni-badge press">보도</span><span class="ni-title">[디지털타임스] "생성형 AI 교육 수요 급증… 유비온 단기과정 마감 잇따라"</span><span class="ni-date">2026.01.22</span></a>
+      <a class="news-item" href="#"><span class="ni-badge youtube">영상</span><span class="ni-title">[YouTube] 6개월 금융 빅데이터 과정 커리큘럼 미리보기</span><span class="ni-date">2026.01.10</span></a>
+    </div>
+    <div class="news-more"><button class="news-more-btn">이전 소식 더 보기 ↓</button></div>
+  </div>
+
+  <!-- TAB 2: Location -->
+  <div class="tab-panel" id="panel-1">
+    <div class="section-title">🏢 UBION AI 디지털 교육센터</div>
+    <div class="location-grid">
+      <div class="map-placeholder"><span class="mp-icon">🗺</span>지도 영역 (카카오맵/네이버맵 연동 예정)</div>
+      <div class="location-info">
+        <div class="li-card"><div class="li-label">주소</div><div class="li-value">서울특별시 구로구 디지털로32나길 22, 4·5층<br><span style="font-size:12px;color:var(--slate-500)">(구로동, 코오롱디지털타워빌란트2차)</span></div></div>
+        <div class="li-card"><div class="li-label">전화번호</div><div class="li-value"><a href="tel:1588-1381">📞 1588-1381</a> (대표)<br><span style="font-size:12px;color:var(--slate-500)">평일 09:00~18:00 (점심 12:00~13:00)</span></div></div>
+        <div class="li-card"><div class="li-label">교통편</div><div class="li-value">🚇 구로디지털단지역 2번 출구 도보 7분<br>🚌 버스 정류장 '구로디지털단지역' 하차</div></div>
+        <div class="li-card"><div class="li-label">이메일</div><div class="li-value"><a href="mailto:edu@ubion.co.kr">edu@ubion.co.kr</a></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 3: FAQ -->
+  <div class="tab-panel" id="panel-2">
+    <div class="section-title">자주 묻는 질문</div>
+    <div class="faq-list" id="faq-list"></div>
+  </div>
+</div>
+
+<footer class="footer">
+  <p>© 2026 UBION AI Education Center. All rights reserved. · <a href="#">개인정보처리방침</a> · <a href="#">이용약관</a></p>
+  <p style="margin-top:8px">📍 서울 구로구 디지털로32나길 22 4,5층 · 📞 1588-1381</p>
+</footer>
+
+<script src="common.js"></script>
+<script>
+const faqs = [
+  { q: '수강료가 정말 무료인가요?', a: 'K-Digital Training 과정은 <strong>고용노동부 국비지원으로 교육비 전액이 무료</strong>입니다. 내일배움카드를 발급받으시면 자기부담금 0원으로 수강하실 수 있습니다. 단기 마스터클래스의 경우 내일배움카드를 통한 환급이 적용됩니다.' },
+  { q: '비전공자도 수강할 수 있나요?', a: '네, <strong>비전공자 특화 커리큘럼</strong>으로 설계되어 있습니다. 코딩 경험이 없는 분도 Python 기초부터 시작하며, 1:1 보충 지도를 통해 레벨 차이를 해소합니다. 실제 수료생의 60% 이상이 비전공자 출신입니다.' },
+  { q: '수강 후 취업은 어떻게 지원하나요?', a: '과정 수료 후 <strong>전담 취업매니저가 1:1로 배정</strong>됩니다. 이력서 클리닉, 포트폴리오 빌더, 모의면접 코칭을 지원하며, 40개 이상의 MOU 협력기업을 통한 채용 연계도 진행합니다. 취업 연계율은 92%입니다.' },
+  { q: '훈련 장려금은 얼마인가요?', a: '<strong>월 최대 316,000원</strong>의 훈련 장려금이 별도로 지급됩니다 (출석률 80% 이상 시). 정확한 금액은 고용노동부 기준에 따라 변동될 수 있으며, HRD-NET에서 확인 가능합니다.' },
+  { q: '온라인으로도 수강 가능한가요?', a: 'K-Digital Training 장기 과정은 <strong>오프라인(서울 구로 센터) 위주</strong>로 진행됩니다. 단기 마스터클래스 중 일부는 온라인+오프라인 병행으로 운영되므로, 각 과정 상세 페이지에서 확인해 주세요.' },
+  { q: '수강 신청은 어떻게 하나요?', a: '① HRD-NET에서 <strong>내일배움카드 발급</strong> → ② 유비온 홈페이지에서 원하는 과정 선택 → ③ 온라인 신청서 작성 → ④ 사전 상담(전화) 후 등록 완료. 궁금하신 점은 1588-1381로 문의해 주세요.' },
+  { q: '해커톤이나 커뮤니티 활동이 있나요?', a: '네! 매 기수마다 <strong>해커톤 형식의 팀 프로젝트</strong>를 진행하며, 커뮤니티 페이지에서 자료 마켓, AI Wordle, 매일 퀴즈 등 다양한 게이미피케이션 활동에 참여할 수 있습니다.' },
+];
+
+function renderFAQ() {
+  document.getElementById('faq-list').innerHTML = faqs.map((f, i) => `
+    <div class="faq-item" id="faq-${i}">
+      <div class="faq-q" onclick="toggleFaq(${i})">
+        <span class="fq-text"><span class="fq-badge">Q${i + 1}</span> ${f.q}</span>
+        <span class="fq-arrow">▾</span>
+      </div>
+      <div class="faq-a">${f.a}</div>
+    </div>
+  `).join('');
+}
+
+function toggleFaq(idx) {
+  const item = document.getElementById('faq-' + idx);
+  const wasOpen = item.classList.contains('open');
+  document.querySelectorAll('.faq-item').forEach(f => f.classList.remove('open'));
+  if (!wasOpen) item.classList.add('open');
+}
+
+renderFAQ();
+</script>
+</body>
+</html>

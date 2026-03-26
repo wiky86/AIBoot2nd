@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>커뮤니티 | UBION AI 디지털 교육센터</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="common.css">
+<style>
+/* ─── Community Page Overrides ─── */
+.page-hero::before { background: radial-gradient(circle, rgba(245,158,11,0.08), transparent 70%); }
+.page-hero .sub { color: var(--amber-400); }
+.page-hero h1 .acc { background: linear-gradient(135deg, var(--amber-400), var(--teal-400)); }
+.tab-btn.active { background: var(--amber-500); border-color: var(--amber-500); color: var(--white); box-shadow: 0 4px 20px rgba(245,158,11,0.3); }
+
+/* Market */
+.market-stats { display: flex; gap: 16px; margin-bottom: 32px; }
+.ms-pill { display: flex; align-items: center; gap: 8px; padding: 12px 20px; border-radius: 12px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); }
+.ms-pill .ms-num { font-family: var(--font-d); font-size: 20px; font-weight: 700; color: var(--white); }
+.ms-pill .ms-label { font-size: 12px; color: var(--slate-500); }
+.market-filters { display: flex; gap: 6px; margin-bottom: 24px; flex-wrap: wrap; }
+.mf { padding: 8px 16px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.08); background: transparent; color: var(--slate-400); font-size: 12px; font-weight: 600; font-family: var(--font-b); cursor: pointer; transition: all .2s; }
+.mf:hover { border-color: rgba(255,255,255,0.15); color: var(--white); }
+.mf.active { background: var(--amber-500); border-color: var(--amber-500); color: var(--white); }
+.market-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; margin-bottom: 32px; }
+.m-card { background: var(--navy-800); border: 1px solid rgba(255,255,255,0.06); border-radius: 16px; padding: 24px; transition: all .3s; cursor: pointer; position: relative; }
+.m-card:hover { border-color: rgba(245,158,11,0.2); transform: translateY(-3px); }
+.m-card .m-badge { position: absolute; top: 16px; right: 16px; padding: 3px 8px; border-radius: 5px; font-size: 10px; font-weight: 700; }
+.m-badge.best { background: rgba(245,158,11,0.15); color: var(--amber-400); }
+.m-badge.new { background: rgba(34,197,94,0.15); color: var(--green-400); }
+.m-type-tag { display: inline-block; padding: 3px 8px; border-radius: 5px; font-size: 10px; font-weight: 700; margin-bottom: 10px; }
+.m-type-tag.pdf { background: rgba(59,130,246,0.1); color: var(--blue-400); }
+.m-type-tag.vod { background: rgba(139,92,246,0.1); color: var(--purple-400); }
+.m-type-tag.template { background: rgba(20,184,166,0.1); color: var(--teal-400); }
+.m-type-tag.interview { background: rgba(245,158,11,0.1); color: var(--amber-400); }
+.m-card h3 { font-size: 15px; font-weight: 700; color: var(--white); margin-bottom: 8px; line-height: 1.4; }
+.m-card .m-tags { display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 12px; }
+.m-card .m-tags span { font-size: 10px; color: var(--slate-500); }
+.m-card-footer { display: flex; align-items: center; justify-content: space-between; padding-top: 12px; border-top: 1px solid rgba(255,255,255,0.04); }
+.m-card-footer .m-meta { font-size: 11px; color: var(--slate-500); }
+.m-card-footer .m-price { font-family: var(--font-d); font-size: 16px; font-weight: 700; color: var(--amber-400); }
+.m-buy { padding: 8px 16px; border-radius: 6px; border: none; background: var(--amber-500); color: var(--white); font-size: 12px; font-weight: 600; cursor: pointer; font-family: var(--font-b); transition: background .2s; }
+.m-buy:hover { background: var(--amber-400); }
+.m-sell-banner { background: linear-gradient(135deg, rgba(245,158,11,0.06), rgba(20,184,166,0.06)); border: 1px dashed rgba(245,158,11,0.2); border-radius: 16px; padding: 28px 32px; display: flex; align-items: center; justify-content: space-between; }
+.m-sell-banner .msb-text h3 { font-size: 18px; font-weight: 700; color: var(--white); margin-bottom: 4px; }
+.m-sell-banner .msb-text p { font-size: 13px; color: var(--slate-400); }
+.m-sell-banner .msb-text .highlight { color: var(--amber-400); font-weight: 700; }
+.msb-btn { padding: 12px 24px; border-radius: 10px; border: 1px solid var(--amber-500); background: transparent; color: var(--amber-400); font-size: 14px; font-weight: 600; cursor: pointer; font-family: var(--font-b); transition: all .2s; flex-shrink: 0; }
+.msb-btn:hover { background: rgba(245,158,11,0.1); }
+
+/* Playzone */
+.play-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+.play-box { background: var(--navy-800); border: 1px solid rgba(255,255,255,0.06); border-radius: 20px; padding: 32px; }
+.wordle-title { font-family: var(--font-d); font-size: 20px; font-weight: 700; color: var(--white); margin-bottom: 4px; display: flex; align-items: center; gap: 8px; }
+.wordle-sub { font-size: 13px; color: var(--slate-400); margin-bottom: 20px; }
+.wordle-board { display: flex; flex-direction: column; gap: 6px; margin-bottom: 20px; align-items: center; }
+.wordle-row { display: flex; gap: 6px; }
+.wordle-cell { width: 48px; height: 48px; border: 2px solid rgba(255,255,255,0.1); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: var(--font-d); font-size: 20px; font-weight: 700; color: var(--white); text-transform: uppercase; transition: all .3s; }
+.wordle-cell.correct { background: #22C55E; border-color: #22C55E; }
+.wordle-cell.present { background: #F59E0B; border-color: #F59E0B; }
+.wordle-cell.absent { background: #475569; border-color: #475569; }
+.wordle-cell.active { border-color: var(--slate-300); }
+.wordle-cell.pop { animation: pop .15s ease; }
+@keyframes pop { 0% { transform: scale(1); } 50% { transform: scale(1.12); } 100% { transform: scale(1); } }
+.wordle-keyboard { display: flex; flex-direction: column; gap: 6px; align-items: center; }
+.kb-row { display: flex; gap: 4px; }
+.kb-key { min-width: 32px; height: 40px; border-radius: 6px; border: none; background: rgba(255,255,255,0.1); color: var(--white); font-size: 13px; font-weight: 600; cursor: pointer; font-family: var(--font-d); transition: all .15s; padding: 0 8px; }
+.kb-key:hover { background: rgba(255,255,255,0.18); }
+.kb-key.wide { min-width: 52px; font-size: 11px; }
+.kb-key.correct { background: #22C55E; }
+.kb-key.present { background: #F59E0B; }
+.kb-key.absent { background: #334155; }
+.wordle-msg { text-align: center; font-size: 14px; font-weight: 600; margin-top: 12px; min-height: 24px; }
+.wordle-streak { display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--slate-400); margin-bottom: 16px; }
+.wordle-streak .ws-num { font-family: var(--font-d); font-size: 18px; font-weight: 700; color: var(--amber-400); }
+.quiz-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+.quiz-title { font-family: var(--font-d); font-size: 20px; font-weight: 700; color: var(--white); display: flex; align-items: center; gap: 8px; }
+.quiz-streak { font-size: 13px; color: var(--slate-400); }
+.quiz-streak .qs-num { font-family: var(--font-d); font-size: 18px; font-weight: 700; color: var(--teal-400); }
+.quiz-q { font-size: 16px; font-weight: 600; color: var(--white); margin-bottom: 20px; line-height: 1.5; }
+.quiz-opts { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; }
+.qo { padding: 14px 18px; border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; background: transparent; color: var(--slate-300); font-size: 14px; font-family: var(--font-b); cursor: pointer; transition: all .2s; text-align: left; display: flex; align-items: center; gap: 10px; }
+.qo:hover { border-color: rgba(20,184,166,0.3); background: rgba(20,184,166,0.04); }
+.qo .qo-marker { width: 24px; height: 24px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.15); display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 11px; font-weight: 700; transition: all .2s; }
+.qo.selected { border-color: var(--teal-500); background: rgba(20,184,166,0.08); color: var(--white); }
+.qo.selected .qo-marker { border-color: var(--teal-500); background: var(--teal-500); color: var(--white); }
+.qo.correct-answer { border-color: var(--green-500); background: rgba(34,197,94,0.08); }
+.qo.correct-answer .qo-marker { border-color: var(--green-500); background: var(--green-500); }
+.qo.wrong-answer { border-color: var(--red-500); background: rgba(239,68,68,0.08); }
+.qo.wrong-answer .qo-marker { border-color: var(--red-500); background: var(--red-500); }
+.quiz-explain { padding: 16px 18px; background: rgba(20,184,166,0.04); border: 1px solid rgba(20,184,166,0.1); border-radius: 10px; font-size: 13px; color: var(--slate-300); line-height: 1.6; display: none; margin-bottom: 16px; }
+.quiz-explain.show { display: block; animation: fadeUp .3s ease-out; }
+.quiz-next-btn { width: 100%; padding: 14px; border-radius: 10px; border: none; background: var(--teal-500); color: var(--white); font-size: 14px; font-weight: 600; cursor: pointer; font-family: var(--font-b); transition: all .2s; display: none; }
+.quiz-next-btn.show { display: block; }
+.quiz-next-btn:hover { background: var(--teal-400); }
+
+/* Reviews */
+.review-filters { display: flex; gap: 6px; margin-bottom: 24px; flex-wrap: wrap; }
+.rf { padding: 8px 16px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.08); background: transparent; color: var(--slate-400); font-size: 12px; font-weight: 600; font-family: var(--font-b); cursor: pointer; transition: all .2s; }
+.rf:hover { border-color: rgba(255,255,255,0.15); color: var(--white); }
+.rf.active { background: var(--amber-500); border-color: var(--amber-500); color: var(--white); }
+.review-list { display: flex; flex-direction: column; gap: 16px; margin-bottom: 32px; }
+.r-card { background: var(--navy-800); border: 1px solid rgba(255,255,255,0.06); border-radius: 16px; padding: 28px; transition: all .3s; }
+.r-card:hover { border-color: rgba(245,158,11,0.15); }
+.r-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+.r-author { display: flex; align-items: center; gap: 12px; }
+.r-avatar { width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 700; flex-shrink: 0; }
+.r-info .r-name { font-size: 14px; font-weight: 700; color: var(--white); }
+.r-info .r-gen { font-size: 11px; color: var(--amber-400); font-weight: 600; }
+.r-tag-pill { padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: 700; }
+.r-tag-pill.employ { background: rgba(59,130,246,0.1); color: var(--blue-400); }
+.r-tag-pill.cert { background: rgba(34,197,94,0.1); color: var(--green-400); }
+.r-tag-pill.switch { background: rgba(139,92,246,0.1); color: var(--purple-400); }
+.r-tag-pill.portfolio { background: rgba(245,158,11,0.1); color: var(--amber-400); }
+.r-card h3 { font-size: 17px; font-weight: 700; color: var(--white); margin-bottom: 10px; line-height: 1.4; }
+.r-card > p { font-size: 13px; color: var(--slate-400); line-height: 1.7; margin-bottom: 14px; }
+.r-footer { display: flex; align-items: center; justify-content: space-between; }
+.r-stars { color: var(--amber-400); font-size: 14px; }
+.r-stats { font-size: 12px; color: var(--slate-500); display: flex; gap: 12px; }
+.r-write-banner { background: linear-gradient(135deg, rgba(139,92,246,0.06), rgba(59,130,246,0.06)); border: 1px dashed rgba(139,92,246,0.2); border-radius: 16px; padding: 28px 32px; display: flex; align-items: center; justify-content: space-between; }
+.r-write-banner .rw-text h3 { font-size: 18px; font-weight: 700; color: var(--white); margin-bottom: 4px; }
+.r-write-banner .rw-text p { font-size: 13px; color: var(--slate-400); }
+.rw-btn { padding: 12px 24px; border-radius: 10px; border: none; background: var(--purple-500); color: var(--white); font-size: 14px; font-weight: 600; cursor: pointer; font-family: var(--font-b); transition: all .2s; flex-shrink: 0; }
+.rw-btn:hover { background: var(--purple-400); }
+.footer { margin-top: 40px; }
+</style>
+</head>
+<body>
+
+<nav class="gnb">
+  <a href="index.html" class="gnb-logo"><em>UBION</em> 디지털 교육센터</a>
+  <ul class="gnb-menu">
+    <li><a href="ubion_start_page.html">시작하기</a></li>
+    <li><a href="ubion_courses_page.html">교육과정</a></li>
+    <li><a href="ubion_career_page.html">커리어</a></li>
+    <li><a href="ubion_community_page.html" class="active">커뮤니티</a></li>
+    <li><a href="ubion_news_center.html">소식·센터</a></li>
+  </ul>
+  <button class="gnb-cta" onclick="location.href='ubion_start_page.html'">무료 진단하기</button>
+</nav>
+
+<section class="page-hero">
+  <div class="sub">COMMUNITY</div>
+  <h1>함께 성장하는 <span class="acc">커뮤니티</span></h1>
+  <p>자료 마켓에서 실전 무기를 갖추고, 플레이존에서 감각을 키우고, 선배들의 합격 후기로 방향을 잡으세요.</p>
+</section>
+
+<div class="content">
+  <div class="tab-bar">
+    <button class="tab-btn active" onclick="switchTab(0)">📚 자료 마켓</button>
+    <button class="tab-btn" onclick="switchTab(1)">🎮 플레이존</button>
+    <button class="tab-btn" onclick="switchTab(2)">🏆 합격 후기·팁</button>
+  </div>
+
+  <!-- TAB 1: Marketplace -->
+  <div class="tab-panel active" id="panel-0">
+    <div class="market-stats">
+      <div class="ms-pill"><span class="ms-num">520+</span><span class="ms-label">등록 자료</span></div>
+      <div class="ms-pill"><span class="ms-num" style="color:var(--amber-400)">80%</span><span class="ms-label">멘토 수익 배분</span></div>
+      <div class="ms-pill"><span class="ms-num" style="color:var(--teal-400)">12,400+</span><span class="ms-label">누적 다운로드</span></div>
+    </div>
+    <div class="market-filters">
+      <button class="mf active" onclick="filterMarket('all',this)">전체</button>
+      <button class="mf" onclick="filterMarket('pdf',this)">PDF 요약본</button>
+      <button class="mf" onclick="filterMarket('vod',this)">VOD 강의</button>
+      <button class="mf" onclick="filterMarket('interview',this)">면접 대비</button>
+      <button class="mf" onclick="filterMarket('template',this)">템플릿</button>
+    </div>
+    <div class="market-grid" id="market-grid"></div>
+    <div class="m-sell-banner">
+      <div class="msb-text"><h3>내가 정리한 자료, 수익으로 만들어보세요 💰</h3><p>자료 등록 시 결제 금액의 <span class="highlight">80%</span>가 멘토에게 지급됩니다.</p></div>
+      <button class="msb-btn">자료 등록하기</button>
+    </div>
+  </div>
+
+  <!-- TAB 2: Playzone -->
+  <div class="tab-panel" id="panel-1">
+    <div class="play-grid">
+      <div class="play-box">
+        <div class="wordle-title">🟩 오늘의 AI Wordle</div>
+        <div class="wordle-sub">6글자 IT/AI 관련 영어 단어를 맞춰보세요! (6번 기회)</div>
+        <div class="wordle-streak">연속 정답 <span class="ws-num" id="w-streak">🔥 0</span></div>
+        <div class="wordle-board" id="w-board"></div>
+        <div class="wordle-keyboard" id="w-keyboard"></div>
+        <div class="wordle-msg" id="w-msg"></div>
+      </div>
+      <div class="play-box">
+        <div class="quiz-header"><div class="quiz-title">🧠 매일 지식 퀴즈</div><div class="quiz-streak">연속 출석 <span class="qs-num" id="q-streak">🏆 0</span></div></div>
+        <div id="quiz-area"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 3: Reviews -->
+  <div class="tab-panel" id="panel-2">
+    <div class="review-filters">
+      <button class="rf active" onclick="filterReview('all',this)">전체</button>
+      <button class="rf" onclick="filterReview('employ',this)">취업 성공</button>
+      <button class="rf" onclick="filterReview('cert',this)">자격증 합격</button>
+      <button class="rf" onclick="filterReview('switch',this)">이직 성공</button>
+      <button class="rf" onclick="filterReview('portfolio',this)">포트폴리오</button>
+    </div>
+    <div class="review-list" id="review-list"></div>
+    <div class="r-write-banner">
+      <div class="rw-text"><h3>나도 후기 작성하기 ✍️</h3><p>수료생이라면 누구나 멘토로 활동하며 성공 경험을 공유할 수 있습니다.</p></div>
+      <button class="rw-btn">멘토 등록 신청</button>
+    </div>
+  </div>
+</div>
+
+<footer class="footer">
+  <p>© 2026 UBION AI Education Center. All rights reserved. · <a href="#">개인정보처리방침</a> · <a href="#">이용약관</a></p>
+  <p style="margin-top:8px">📍 서울 구로구 디지털로32나길 22 4,5층 · 📞 1588-1381</p>
+</footer>
+
+<script src="common.js"></script>
+<script>
+// ═══ MARKETPLACE ═══
+const marketItems=[
+  {type:'pdf',badge:'best',title:'[2026 최신] 파이썬 코딩테스트 핵심 알고리즘 50제',tags:['#코테준비','#파이썬','#삼성기출'],downloads:'1,240',rating:'4.9',price:'15,000'},
+  {type:'vod',badge:'',title:'3시간 완성! SQL 실전 면접 질문 TOP 30',tags:['#SQL','#면접대비'],downloads:'892',rating:'4.8',price:'29,000'},
+  {type:'pdf',badge:'new',title:'ADsP + SQLD 동시 합격 족보 (기출 3개년 분석)',tags:['#ADsP','#SQLD','#자격증'],downloads:'2,104',rating:'4.9',price:'12,000'},
+  {type:'template',badge:'',title:'데이터 분석가 포트폴리오 템플릿 (Notion + PPT)',tags:['#포트폴리오','#Notion'],downloads:'654',rating:'4.7',price:'8,000'},
+  {type:'interview',badge:'best',title:'네카라쿠배 데이터 직군 면접 질문 100선',tags:['#면접','#대기업','#데이터분석'],downloads:'1,890',rating:'4.9',price:'18,000'},
+  {type:'vod',badge:'new',title:'ChatGPT 프롬프트 엔지니어링 마스터클래스',tags:['#ChatGPT','#프롬프트'],downloads:'420',rating:'4.8',price:'35,000'},
+];
+function renderMarket(filter='all'){
+  const grid=document.getElementById('market-grid');
+  const filtered=filter==='all'?marketItems:marketItems.filter(m=>m.type===filter);
+  grid.innerHTML=filtered.map(m=>`
+    <div class="m-card">${m.badge?`<span class="m-badge ${m.badge}">${m.badge==='best'?'BEST':'NEW'}</span>`:''}<span class="m-type-tag ${m.type}">${{pdf:'PDF',vod:'VOD',template:'Template',interview:'면접대비'}[m.type]}</span><h3>${m.title}</h3><div class="m-tags">${m.tags.map(t=>`<span>${t}</span>`).join('')}</div><div class="m-card-footer"><span class="m-meta">⬇ ${m.downloads} · ★ ${m.rating}</span><div style="display:flex;align-items:center;gap:8px"><span class="m-price">${m.price}원</span><button class="m-buy">구매</button></div></div></div>
+  `).join('');
+}
+function filterMarket(type,el){ document.querySelectorAll('.mf').forEach(p=>p.classList.remove('active')); el.classList.add('active'); renderMarket(type); }
+renderMarket();
+
+// ═══ WORDLE ═══
+const WORDS=['PYTHON','TENSOR','KERNEL','DOCKER','GITHUB','NEURAL','LAMBDA','SCIKIT','PANDAS','CURSOR'];
+const answer=WORDS[Math.floor(Math.random()*WORDS.length)];
+let wRow=0,wCol=0,wDone=false;
+const board=[];
+function initWordle(){
+  const bEl=document.getElementById('w-board'); bEl.innerHTML='';
+  for(let r=0;r<6;r++){ board[r]=[]; const row=document.createElement('div'); row.className='wordle-row';
+    for(let c=0;c<6;c++){ const cell=document.createElement('div'); cell.className='wordle-cell'; row.appendChild(cell); board[r][c]=cell; }
+    bEl.appendChild(row); }
+  board[0][0].classList.add('active');
+  const kbEl=document.getElementById('w-keyboard');
+  const rows=['QWERTYUIOP','ASDFGHJKL','ZXCVBNM'];
+  kbEl.innerHTML=rows.map((row,ri)=>`<div class="kb-row">${ri===2?'<button class="kb-key wide" onclick="wType(\'ENTER\')">Enter</button>':''}${row.split('').map(k=>`<button class="kb-key" id="kb-${k}" onclick="wType('${k}')">${k}</button>`).join('')}${ri===2?'<button class="kb-key wide" onclick="wType(\'BACK\')">⌫</button>':''}</div>`).join('');
+}
+function wType(key){
+  if(wDone)return;
+  if(key==='BACK'){if(wCol>0){wCol--;board[wRow][wCol].textContent='';board[wRow][wCol].classList.remove('pop')}return;}
+  if(key==='ENTER'){if(wCol<6)return;checkWordle();return;}
+  if(wCol>=6)return;
+  board[wRow][wCol].textContent=key;board[wRow][wCol].classList.add('pop');wCol++;
+}
+function checkWordle(){
+  const guess=Array.from({length:6},(_,i)=>board[wRow][i].textContent).join('');
+  const ans=[...answer]; const result=Array(6).fill('absent');
+  for(let i=0;i<6;i++){if(guess[i]===ans[i]){result[i]='correct';ans[i]=null}}
+  for(let i=0;i<6;i++){if(result[i]==='correct')continue;const idx=ans.indexOf(guess[i]);if(idx!==-1){result[i]='present';ans[idx]=null}}
+  for(let i=0;i<6;i++){setTimeout(()=>{board[wRow][i].classList.add(result[i]);const kb=document.getElementById('kb-'+guess[i]);if(kb){if(result[i]==='correct')kb.className='kb-key correct';else if(result[i]==='present'&&!kb.classList.contains('correct'))kb.className='kb-key present';else if(!kb.classList.contains('correct')&&!kb.classList.contains('present'))kb.className='kb-key absent';}},i*120);}
+  setTimeout(()=>{
+    if(guess===answer){document.getElementById('w-msg').innerHTML='<span style="color:var(--green-400)">🎉 정답! '+answer+'</span>';wDone=true;const s=parseInt(localStorage.getItem('wStreak')||'0')+1;localStorage.setItem('wStreak',s);document.getElementById('w-streak').textContent='🔥 '+s;}
+    else if(wRow>=5){document.getElementById('w-msg').innerHTML='<span style="color:var(--red-500)">정답: '+answer+'</span>';wDone=true;localStorage.setItem('wStreak','0');}
+    else{wRow++;wCol=0;if(wRow<6)board[wRow][0].classList.add('active');}
+  },800);
+}
+document.addEventListener('keydown',e=>{if(document.querySelectorAll('.tab-panel')[1].classList.contains('active')){if(e.key==='Enter')wType('ENTER');else if(e.key==='Backspace')wType('BACK');else if(/^[a-zA-Z]$/.test(e.key))wType(e.key.toUpperCase());}});
+document.getElementById('w-streak').textContent='🔥 '+(localStorage.getItem('wStreak')||'0');
+initWordle();
+
+// ═══ DAILY QUIZ ═══
+const quizBank=[
+  {q:'머신러닝에서 "과적합(Overfitting)"이란?',opts:['학습 데이터에만 지나치게 맞춰진 모델','데이터가 너무 적은 상태','모델의 학습 속도가 빠른 현상','테스트 정확도가 높은 현상'],correct:0,explain:'과적합은 모델이 훈련 데이터의 노이즈까지 학습하여, 새로운 데이터에 대한 일반화 성능이 떨어지는 현상입니다.'},
+  {q:'SQL에서 NULL 값을 포함한 행을 필터링하는 올바른 구문은?',opts:['WHERE col = NULL','WHERE col IS NULL','WHERE col == NULL','WHERE col EQUALS NULL'],correct:1,explain:'SQL에서 NULL 비교는 IS NULL 또는 IS NOT NULL을 사용합니다.'},
+  {q:'Python의 리스트 컴프리헨션 [x**2 for x in range(5)]의 결과는?',opts:['[0, 1, 4, 9, 16]','[1, 4, 9, 16, 25]','[0, 1, 2, 3, 4]','[0, 2, 4, 6, 8]'],correct:0,explain:'range(5)는 0~4를 생성하고, 각 값을 제곱합니다. 결과: [0, 1, 4, 9, 16]'},
+  {q:'"트랜스포머(Transformer)" 아키텍처의 핵심 메커니즘은?',opts:['역전파(Backpropagation)','어텐션(Attention)','합성곱(Convolution)','순환(Recurrence)'],correct:1,explain:'트랜스포머는 Self-Attention 메커니즘을 통해 입력 시퀀스의 모든 위치 간 관계를 병렬로 처리합니다.'},
+  {q:'데이터 분석에서 EDA란?',opts:['자동 데이터 수집','탐색적 데이터 분석','데이터 암호화','데이터 배포'],correct:1,explain:'EDA(Exploratory Data Analysis)는 데이터의 분포, 패턴, 이상치 등을 시각화하고 탐색하는 초기 분석 단계입니다.'},
+];
+let qIdx=Math.floor(Math.random()*quizBank.length),qAnswered=false;
+function renderQuiz(){
+  const q=quizBank[qIdx];
+  document.getElementById('quiz-area').innerHTML=`<div class="quiz-q">${q.q}</div><div class="quiz-opts" id="q-opts">${q.opts.map((o,i)=>`<button class="qo" onclick="answerQuiz(${i})"><span class="qo-marker">${String.fromCharCode(65+i)}</span>${o}</button>`).join('')}</div><div class="quiz-explain" id="q-explain">${q.explain}</div><button class="quiz-next-btn" id="q-next" onclick="nextQuiz()">다음 문제 →</button>`;
+  qAnswered=false;
+}
+function answerQuiz(idx){
+  if(qAnswered)return; qAnswered=true;
+  const q=quizBank[qIdx]; const opts=document.querySelectorAll('#q-opts .qo');
+  opts[q.correct].classList.add('correct-answer');
+  if(idx!==q.correct)opts[idx].classList.add('wrong-answer');
+  else{const s=parseInt(localStorage.getItem('qStreak')||'0')+1;localStorage.setItem('qStreak',s);document.getElementById('q-streak').textContent='🏆 '+s;}
+  document.getElementById('q-explain').classList.add('show');document.getElementById('q-next').classList.add('show');
+}
+function nextQuiz(){qIdx=(qIdx+1)%quizBank.length;renderQuiz();}
+document.getElementById('q-streak').textContent='🏆 '+(localStorage.getItem('qStreak')||'0');
+renderQuiz();
+
+// ═══ REVIEWS ═══
+const reviews=[
+  {type:'employ',name:'심*혁',gen:'2기',avatar:'심',avatarBg:'rgba(59,130,246,0.15)',avatarColor:'var(--blue-400)',tag:'취업 성공',tagClass:'employ',title:'비전공자에서 네이버 데이터 직군 합격까지',body:'문과 출신이라 코딩 한 줄 몰랐는데, 유비온 과정에서 Python과 SQL을 배우고 실무 프로젝트까지 경험했습니다.',rating:5,views:'4.2k',likes:'243',comments:'18'},
+  {type:'cert',name:'이*현',gen:'3기',avatar:'이',avatarBg:'rgba(34,197,94,0.15)',avatarColor:'var(--green-400)',tag:'자격증 합격',tagClass:'cert',title:'ADsP + SQLD 동시 합격 후기 (비전공자)',body:'과정 중에 ADsP와 SQLD를 동시에 준비했습니다. 멘토님이 공유해주신 기출 요약 자료가 핵심만 정리되어 있어서 도움이 되었습니다.',rating:5,views:'3.8k',likes:'189',comments:'24'},
+  {type:'switch',name:'정*도',gen:'4기',avatar:'정',avatarBg:'rgba(139,92,246,0.15)',avatarColor:'var(--purple-400)',tag:'이직 성공',tagClass:'switch',title:'영업직에서 데이터 분석가로 이직 성공!',body:'5년간 영업만 하다가 데이터 분석으로 전환했습니다. 멘토님의 1:1 과외로 포트폴리오를 완성했습니다.',rating:5,views:'5.1k',likes:'312',comments:'31'},
+  {type:'portfolio',name:'김*태',gen:'3기',avatar:'김',avatarBg:'rgba(245,158,11,0.15)',avatarColor:'var(--amber-400)',tag:'포트폴리오',tagClass:'portfolio',title:'Kaggle 메달 + 포트폴리오로 면접 무조건 합격',body:'멘토님이 알려주신 Kaggle 대회 전략으로 브론즈 메달을 획득하고 포트폴리오화해서 면접에서 100% 통과했습니다.',rating:5,views:'6.3k',likes:'278',comments:'42'},
+  {type:'employ',name:'박*연',gen:'1기',avatar:'박',avatarBg:'rgba(20,184,166,0.15)',avatarColor:'var(--teal-400)',tag:'취업 성공',tagClass:'employ',title:'졸업 전 AI 스타트업에 개발자로 합류한 비결',body:'학교에서만 배운 이론은 부족했습니다. 유비온에서 실무 프로젝트를 경험하고, 멘토님의 코드 리뷰를 통해 성장했어요.',rating:4.8,views:'2.9k',likes:'156',comments:'12'},
+];
+function renderReviews(filter='all'){
+  const list=document.getElementById('review-list');
+  const filtered=filter==='all'?reviews:reviews.filter(r=>r.type===filter);
+  list.innerHTML=filtered.map(r=>`
+    <div class="r-card"><div class="r-top"><div class="r-author"><div class="r-avatar" style="background:${r.avatarBg};color:${r.avatarColor}">${r.avatar}</div><div class="r-info"><div class="r-name">${r.name}</div><div class="r-gen">[${r.gen}] 수료생</div></div></div><span class="r-tag-pill ${r.tagClass}">#${r.tag}</span></div><h3>${r.title}</h3><p>${r.body}</p><div class="r-footer"><span class="r-stars">${'★'.repeat(Math.floor(r.rating))}${r.rating%1?'☆':''} ${r.rating}</span><span class="r-stats"><span>👁 ${r.views}</span><span>👍 ${r.likes}</span><span>💬 ${r.comments}</span></span></div></div>
+  `).join('');
+}
+function filterReview(type,el){ document.querySelectorAll('.rf').forEach(p=>p.classList.remove('active')); el.classList.add('active'); renderReviews(type); }
+renderReviews();
+</script>
+</body>
+</html>

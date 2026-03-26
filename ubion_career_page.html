@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>커리어 | UBION AI 디지털 교육센터</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="common.css">
+<style>
+/* ─── Career Page Overrides ─── */
+.page-hero::before { background: radial-gradient(circle, rgba(59,130,246,0.1), transparent 70%); }
+.page-hero .sub { color: var(--blue-400); }
+.page-hero h1 .acc { background: linear-gradient(135deg, var(--blue-400), var(--teal-400)); }
+.tab-btn.active { background: var(--blue-500); border-color: var(--blue-500); color: var(--white); box-shadow: 0 4px 20px rgba(59,130,246,0.3); }
+
+/* Employment Stats */
+.metric-row { display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; margin-bottom: 48px; }
+.metric-card { text-align: center; padding: 32px 20px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 16px; transition: border-color .3s; }
+.metric-card:hover { border-color: rgba(59,130,246,0.2); }
+.mc-num { font-family: var(--font-d); font-size: 42px; font-weight: 700; color: var(--white); }
+.mc-num .hl { color: var(--blue-400); }
+.mc-label { font-size: 13px; color: var(--slate-500); margin-top: 4px; }
+.alumni-section-title { font-family: var(--font-d); font-size: 22px; font-weight: 700; color: var(--white); margin-bottom: 24px; display: flex; align-items: center; gap: 8px; }
+.alumni-filters { display: flex; gap: 6px; margin-bottom: 24px; flex-wrap: wrap; }
+.af-pill { padding: 8px 16px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.08); background: transparent; color: var(--slate-400); font-size: 12px; font-weight: 600; font-family: var(--font-b); cursor: pointer; transition: all .2s; }
+.af-pill:hover { border-color: rgba(255,255,255,0.15); color: var(--white); }
+.af-pill.active { background: var(--blue-500); border-color: var(--blue-500); color: var(--white); }
+.alumni-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; margin-bottom: 40px; }
+.alumni-card { background: var(--navy-800); border: 1px solid rgba(255,255,255,0.06); border-radius: 16px; padding: 28px 24px; transition: all .3s; cursor: pointer; }
+.alumni-card:hover { border-color: rgba(59,130,246,0.2); transform: translateY(-3px); }
+.ac-top { display: flex; align-items: center; gap: 14px; margin-bottom: 16px; }
+.ac-avatar { width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 700; flex-shrink: 0; }
+.ac-avatar.v1 { background: rgba(20,184,166,0.15); color: var(--teal-400); }
+.ac-avatar.v2 { background: rgba(59,130,246,0.15); color: var(--blue-400); }
+.ac-avatar.v3 { background: rgba(139,92,246,0.15); color: var(--purple-400); }
+.ac-avatar.v4 { background: rgba(245,158,11,0.15); color: var(--amber-400); }
+.ac-meta .ac-gen { font-size: 11px; color: var(--blue-400); font-weight: 600; }
+.ac-meta .ac-name { font-size: 16px; font-weight: 700; color: var(--white); }
+.ac-body h4 { font-size: 14px; font-weight: 600; color: var(--white); margin-bottom: 6px; line-height: 1.4; }
+.ac-body p { font-size: 12px; color: var(--slate-500); line-height: 1.5; margin-bottom: 12px; }
+.ac-footer { display: flex; align-items: center; justify-content: space-between; }
+.ac-company { font-size: 12px; font-weight: 600; color: var(--teal-400); }
+.ac-stats { display: flex; gap: 10px; font-size: 11px; color: var(--slate-500); }
+
+/* Mentoring */
+.mentor-intro { display: flex; align-items: center; gap: 24px; padding: 28px 32px; background: rgba(59,130,246,0.04); border: 1px solid rgba(59,130,246,0.1); border-radius: 16px; margin-bottom: 36px; }
+.mentor-intro .mi-stats { display: flex; gap: 32px; }
+.mentor-intro .mi-stat .mi-num { font-family: var(--font-d); font-size: 28px; font-weight: 700; color: var(--white); }
+.mentor-intro .mi-stat .mi-label { font-size: 12px; color: var(--slate-500); }
+.mentor-intro .mi-desc { flex: 1; font-size: 14px; color: var(--slate-400); line-height: 1.6; }
+.mentor-filters { display: flex; gap: 6px; margin-bottom: 24px; }
+.mf-pill { padding: 8px 16px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.08); background: transparent; color: var(--slate-400); font-size: 12px; font-weight: 600; font-family: var(--font-b); cursor: pointer; transition: all .2s; }
+.mf-pill:hover { border-color: rgba(255,255,255,0.15); color: var(--white); }
+.mf-pill.active { background: var(--blue-500); border-color: var(--blue-500); color: var(--white); }
+.mentor-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 16px; }
+.mentor-card { background: var(--navy-800); border: 1px solid rgba(255,255,255,0.06); border-radius: 16px; padding: 28px; transition: all .3s; }
+.mentor-card:hover { border-color: rgba(59,130,246,0.2); transform: translateY(-2px); }
+.mtr-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; }
+.mtr-profile { display: flex; gap: 14px; align-items: center; }
+.mtr-avatar { width: 52px; height: 52px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 22px; font-weight: 700; flex-shrink: 0; }
+.mtr-info .mtr-name { font-size: 16px; font-weight: 700; color: var(--white); margin-bottom: 2px; }
+.mtr-info .mtr-title { font-size: 12px; color: var(--slate-500); }
+.mtr-badge { padding: 5px 12px; border-radius: 8px; font-size: 11px; font-weight: 700; }
+.mtr-badge.available { background: rgba(34,197,94,0.1); color: var(--green-400); }
+.mtr-badge.full { background: rgba(239,68,68,0.1); color: #F87171; }
+.mtr-body h4 { font-size: 15px; font-weight: 600; color: var(--white); margin-bottom: 8px; line-height: 1.4; }
+.mtr-body p { font-size: 13px; color: var(--slate-400); line-height: 1.6; margin-bottom: 16px; }
+.mtr-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 16px; }
+.mtr-tags span { padding: 3px 8px; border-radius: 5px; font-size: 11px; background: rgba(255,255,255,0.05); color: var(--slate-400); }
+.mtr-footer { display: flex; align-items: center; justify-content: space-between; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.04); }
+.mtr-reviews { font-size: 12px; color: var(--slate-500); }
+.mtr-reviews .stars { color: var(--amber-400); }
+.mtr-price-row { display: flex; align-items: center; gap: 12px; }
+.mtr-price { font-family: var(--font-d); font-size: 18px; font-weight: 700; color: var(--white); }
+.mtr-unit { font-size: 12px; color: var(--slate-500); }
+.mtr-book { padding: 10px 20px; border-radius: 8px; border: none; font-size: 13px; font-weight: 600; cursor: pointer; font-family: var(--font-b); transition: all .2s; color: var(--white); background: var(--blue-500); }
+.mtr-book:hover { background: var(--blue-400); }
+.mtr-book:disabled { opacity: 0.4; cursor: not-allowed; }
+
+/* Modal */
+.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(6px); z-index: 200; align-items: center; justify-content: center; }
+.modal-overlay.show { display: flex; }
+.modal { background: var(--navy-800); border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; padding: 36px; width: 480px; max-width: 90vw; max-height: 90vh; overflow-y: auto; animation: fadeUp .3s ease-out; }
+.modal h3 { font-family: var(--font-d); font-size: 22px; font-weight: 700; color: var(--white); margin-bottom: 8px; }
+.modal .modal-sub { font-size: 14px; color: var(--slate-400); margin-bottom: 28px; }
+.form-group { margin-bottom: 20px; }
+.form-group label { display: block; font-size: 13px; font-weight: 600; color: var(--white); margin-bottom: 8px; }
+.form-input { width: 100%; padding: 12px 16px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.03); color: var(--white); font-size: 14px; font-family: var(--font-b); transition: border-color .2s; }
+.form-input:focus { outline: none; border-color: var(--blue-400); }
+.form-input::placeholder { color: var(--slate-500); }
+select.form-input { appearance: none; background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L5 5L9 1' stroke='%2394A3B8' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; padding-right: 36px; }
+.time-slots { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; }
+.time-slot { padding: 10px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.08); background: transparent; color: var(--slate-400); font-size: 13px; text-align: center; cursor: pointer; font-family: var(--font-b); transition: all .2s; }
+.time-slot:hover { border-color: rgba(59,130,246,0.3); color: var(--white); }
+.time-slot.selected { border-color: var(--blue-500); background: rgba(59,130,246,0.1); color: var(--white); font-weight: 600; }
+.time-slot.disabled { opacity: 0.3; cursor: not-allowed; pointer-events: none; }
+.modal-actions { display: flex; gap: 10px; margin-top: 28px; }
+.modal-btn { flex: 1; padding: 14px; border-radius: 10px; border: none; font-size: 14px; font-weight: 600; cursor: pointer; font-family: var(--font-b); transition: all .2s; }
+.modal-btn.primary { background: var(--blue-500); color: var(--white); }
+.modal-btn.primary:hover { background: var(--blue-400); }
+.modal-btn.secondary { background: transparent; border: 1px solid rgba(255,255,255,0.1); color: var(--slate-300); }
+.modal-confirm { display: none; text-align: center; padding: 20px 0; }
+.modal-confirm .mc-icon { font-size: 56px; margin-bottom: 16px; }
+.modal-confirm h4 { font-size: 20px; font-weight: 700; color: var(--white); margin-bottom: 8px; }
+.modal-confirm p { font-size: 14px; color: var(--slate-400); margin-bottom: 24px; line-height: 1.6; }
+
+/* Portfolio Support */
+.support-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; margin-bottom: 40px; }
+.support-card { background: var(--navy-800); border: 1px solid rgba(255,255,255,0.06); border-radius: 16px; padding: 32px 24px; transition: all .3s; text-align: center; }
+.support-card:hover { border-color: rgba(59,130,246,0.2); transform: translateY(-3px); }
+.sc-icon { width: 64px; height: 64px; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 28px; margin: 0 auto 20px; }
+.support-card h3 { font-size: 18px; font-weight: 700; color: var(--white); margin-bottom: 8px; }
+.support-card p { font-size: 13px; color: var(--slate-400); line-height: 1.6; margin-bottom: 20px; }
+.sc-features { text-align: left; margin-bottom: 20px; }
+.sc-feat { display: flex; align-items: center; gap: 8px; padding: 6px 0; font-size: 13px; color: var(--slate-300); }
+.sc-feat .check { color: var(--green-400); font-size: 14px; }
+.sc-btn { padding: 12px 24px; border-radius: 10px; border: none; font-size: 14px; font-weight: 600; cursor: pointer; font-family: var(--font-b); transition: all .2s; width: 100%; }
+.sc-btn.blue { background: var(--blue-500); color: var(--white); }
+.sc-btn.blue:hover { background: var(--blue-400); }
+.process-section { padding: 40px 0; }
+.process-title { font-family: var(--font-d); font-size: 22px; font-weight: 700; color: var(--white); text-align: center; margin-bottom: 36px; }
+.process-steps { display: grid; grid-template-columns: repeat(4,1fr); gap: 0; position: relative; }
+.process-steps::before { content: ''; position: absolute; top: 32px; left: 10%; right: 10%; height: 2px; background: rgba(255,255,255,0.06); }
+.ps-step { text-align: center; position: relative; z-index: 1; }
+.ps-num { width: 64px; height: 64px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; font-family: var(--font-d); font-size: 22px; font-weight: 700; }
+.ps-step:nth-child(1) .ps-num { background: rgba(59,130,246,0.15); color: var(--blue-400); border: 2px solid rgba(59,130,246,0.3); }
+.ps-step:nth-child(2) .ps-num { background: rgba(139,92,246,0.15); color: var(--purple-400); border: 2px solid rgba(139,92,246,0.3); }
+.ps-step:nth-child(3) .ps-num { background: rgba(20,184,166,0.15); color: var(--teal-400); border: 2px solid rgba(20,184,166,0.3); }
+.ps-step:nth-child(4) .ps-num { background: rgba(245,158,11,0.15); color: var(--amber-400); border: 2px solid rgba(245,158,11,0.3); }
+.ps-step h4 { font-size: 14px; font-weight: 700; color: var(--white); margin-bottom: 4px; }
+.ps-step p { font-size: 12px; color: var(--slate-500); line-height: 1.5; max-width: 160px; margin: 0 auto; }
+.footer { margin-top: 40px; }
+</style>
+</head>
+<body>
+
+<nav class="gnb">
+  <a href="index.html" class="gnb-logo"><em>UBION</em> 디지털 교육센터</a>
+  <ul class="gnb-menu">
+    <li><a href="ubion_start_page.html">시작하기</a></li>
+    <li><a href="ubion_courses_page.html">교육과정</a></li>
+    <li><a href="ubion_career_page.html" class="active">커리어</a></li>
+    <li><a href="ubion_community_page.html">커뮤니티</a></li>
+    <li><a href="ubion_news_center.html">소식·센터</a></li>
+  </ul>
+  <button class="gnb-cta" onclick="location.href='ubion_start_page.html'">무료 진단하기</button>
+</nav>
+
+<section class="page-hero">
+  <div class="sub">CAREER SUPPORT</div>
+  <h1>수료 후 <span class="acc">취업까지</span> 함께합니다</h1>
+  <p>체계적인 취업 컨설팅, 현업 전문가 멘토링, 포트폴리오 지원으로 성공적인 커리어 전환을 돕습니다.</p>
+</section>
+
+<div class="content">
+  <div class="tab-bar">
+    <button class="tab-btn active" onclick="switchTab(0)">💼 취업현황·성공사례</button>
+    <button class="tab-btn" onclick="switchTab(1)">🤝 1:1 멘토링 예약</button>
+    <button class="tab-btn" onclick="switchTab(2)">📋 포트폴리오 지원</button>
+  </div>
+
+  <!-- TAB 1: Employment -->
+  <div class="tab-panel active" id="panel-0">
+    <div class="metric-row">
+      <div class="metric-card"><div class="mc-num">92<span class="hl">%</span></div><div class="mc-label">취업 연계율</div></div>
+      <div class="metric-card"><div class="mc-num">520<span class="hl">+</span></div><div class="mc-label">누적 수료생</div></div>
+      <div class="metric-card"><div class="mc-num">1:1</div><div class="mc-label">전담 매니저 컨설팅</div></div>
+      <div class="metric-card"><div class="mc-num">40<span class="hl">+</span></div><div class="mc-label">MOU 협력기업</div></div>
+    </div>
+    <div class="alumni-section-title">🏆 수료생 취업 성공 스토리</div>
+    <div class="alumni-filters">
+      <button class="af-pill active" onclick="filterAlumni('all',this)">전체</button>
+      <button class="af-pill" onclick="filterAlumni('employ',this)">취업 성공</button>
+      <button class="af-pill" onclick="filterAlumni('switch',this)">이직 성공</button>
+      <button class="af-pill" onclick="filterAlumni('cert',this)">자격증 합격</button>
+    </div>
+    <div class="alumni-grid" id="alumni-grid"></div>
+  </div>
+
+  <!-- TAB 2: Mentoring -->
+  <div class="tab-panel" id="panel-1">
+    <div class="mentor-intro">
+      <div class="mi-desc">검증된 현업 전문가와 1:1 화상 멘토링, 코드 리뷰, 그룹 스터디를 예약하세요. 이력서 피드백부터 면접 대비까지 밀착 지원합니다.</div>
+      <div class="mi-stats">
+        <div class="mi-stat"><div class="mi-num">152</div><div class="mi-label">활동 멘토</div></div>
+        <div class="mi-stat"><div class="mi-num">98%</div><div class="mi-label">만족도</div></div>
+      </div>
+    </div>
+    <div class="mentor-filters">
+      <button class="mf-pill active" onclick="filterMentors('all',this)">전체</button>
+      <button class="mf-pill" onclick="filterMentors('resume',this)">이력서/포트폴리오</button>
+      <button class="mf-pill" onclick="filterMentors('code',this)">코딩테스트</button>
+      <button class="mf-pill" onclick="filterMentors('interview',this)">면접 대비</button>
+      <button class="mf-pill" onclick="filterMentors('study',this)">그룹 스터디</button>
+    </div>
+    <div class="mentor-grid" id="mentor-grid"></div>
+  </div>
+
+  <!-- TAB 3: Portfolio -->
+  <div class="tab-panel" id="panel-2">
+    <div class="support-grid">
+      <div class="support-card">
+        <div class="sc-icon" style="background:rgba(59,130,246,0.1)">📝</div>
+        <h3>이력서 클리닉</h3>
+        <p>데이터 직군 맞춤 이력서 작성법과 1:1 피드백을 받으세요.</p>
+        <div class="sc-features">
+          <div class="sc-feat"><span class="check">✓</span> 직무별 이력서 템플릿 제공</div>
+          <div class="sc-feat"><span class="check">✓</span> 경력기술서 작성 가이드</div>
+          <div class="sc-feat"><span class="check">✓</span> 1:1 전문가 피드백 1회</div>
+        </div>
+        <button class="sc-btn blue">이력서 클리닉 신청</button>
+      </div>
+      <div class="support-card">
+        <div class="sc-icon" style="background:rgba(139,92,246,0.1)">💻</div>
+        <h3>포트폴리오 빌더</h3>
+        <p>프로젝트 정리부터 GitHub, Notion 포트폴리오 완성까지.</p>
+        <div class="sc-features">
+          <div class="sc-feat"><span class="check">✓</span> Notion/PPT 포트폴리오 템플릿</div>
+          <div class="sc-feat"><span class="check">✓</span> GitHub 프로필 최적화 가이드</div>
+          <div class="sc-feat"><span class="check">✓</span> 프로젝트 스토리텔링 코칭</div>
+        </div>
+        <button class="sc-btn blue">포트폴리오 가이드 받기</button>
+      </div>
+      <div class="support-card">
+        <div class="sc-icon" style="background:rgba(20,184,166,0.1)">🎯</div>
+        <h3>면접 코칭</h3>
+        <p>기술 면접, 인성 면접 모의 실전 + 피드백 리포트 제공.</p>
+        <div class="sc-features">
+          <div class="sc-feat"><span class="check">✓</span> 직무별 기출 질문 은행</div>
+          <div class="sc-feat"><span class="check">✓</span> 1:1 모의 면접 (화상)</div>
+          <div class="sc-feat"><span class="check">✓</span> 피드백 리포트 제공</div>
+        </div>
+        <button class="sc-btn blue">면접 코칭 예약</button>
+      </div>
+    </div>
+    <div class="process-section">
+      <div class="process-title">📌 취업 지원 프로세스</div>
+      <div class="process-steps">
+        <div class="ps-step"><div class="ps-num">1</div><h4>역량 진단</h4><p>스킬트리 진단으로 현재 수준 파악</p></div>
+        <div class="ps-step"><div class="ps-num">2</div><h4>교육 수료</h4><p>맞춤 과정 수강 + 프로젝트 완성</p></div>
+        <div class="ps-step"><div class="ps-num">3</div><h4>포트폴리오</h4><p>이력서·포폴 완성 + 면접 코칭</p></div>
+        <div class="ps-step"><div class="ps-num">4</div><h4>취업 연계</h4><p>MOU 기업 추천 + 채용 매칭</p></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Booking Modal -->
+<div class="modal-overlay" id="booking-modal" onclick="if(event.target===this)closeModal()">
+  <div class="modal" id="modal-content"></div>
+</div>
+
+<footer class="footer">
+  <p>© 2026 UBION AI Education Center. All rights reserved. · <a href="#">개인정보처리방침</a> · <a href="#">이용약관</a></p>
+  <p style="margin-top:8px">📍 서울 구로구 디지털로32나길 22 4,5층 · 📞 1588-1381</p>
+</footer>
+
+<script src="common.js"></script>
+<script>
+// ── Alumni Data ──
+const alumni=[
+  {type:'employ',gen:'2기',name:'심*혁',avatar:'심',avatarClass:'v1',title:'비전공자에서 ○○은행 데이터분석팀 입사',desc:'문과 출신으로 코딩 경험이 전혀 없었지만, 6개월 과정을 통해 Python/SQL을 익히고 실무 프로젝트를 완성해 은행 데이터팀에 합격했습니다.',company:'○○은행 데이터분석팀',views:'4.2k',likes:'243'},
+  {type:'employ',gen:'3기',name:'이*현',avatar:'이',avatarClass:'v2',title:'핀테크 스타트업 데이터 분석가로 합류',desc:'ADsP, SQLD 자격증을 동시에 취득하고 포트폴리오를 무기로 핀테크 기업에 입사했습니다.',company:'△△핀테크',views:'3.8k',likes:'189'},
+  {type:'switch',gen:'4기',name:'정*도',avatar:'정',avatarClass:'v3',title:'영업직에서 카카오 계열사 데이터 분석가로 이직',desc:'5년간 영업만 하다가 커리어 전환을 결심. 멘토링과 포트폴리오 지원으로 대기업 이직에 성공했습니다.',company:'카카오 계열사',views:'5.1k',likes:'312'},
+  {type:'employ',gen:'1기',name:'박*연',avatar:'박',avatarClass:'v4',title:'졸업 전 AI 스타트업 개발자로 합류',desc:'학교 이론만으로는 부족했던 실전 감각을 유비온 프로젝트로 채우고, 멘토님 코드 리뷰로 성장했습니다.',company:'AI 스타트업',views:'2.9k',likes:'156'},
+  {type:'cert',gen:'3기',name:'김*태',avatar:'김',avatarClass:'v1',title:'Kaggle 브론즈 + 포트폴리오로 면접 100% 통과',desc:'멘토님이 알려준 Kaggle 전략으로 메달을 획득하고, 그 프로젝트를 포트폴리오화해서 면접에서 어필했습니다.',company:'○○플랫폼',views:'6.3k',likes:'278'},
+  {type:'switch',gen:'5기',name:'조*원',avatar:'조',avatarClass:'v2',title:'마케터에서 데이터 마케팅 전문가로 전환',desc:'기존 마케팅 경험에 데이터 분석 역량을 더해 CRM 데이터 분석 포지션으로 이직했습니다.',company:'□□커머스',views:'3.1k',likes:'167'},
+];
+
+function renderAlumni(filter='all'){
+  const grid=document.getElementById('alumni-grid');
+  const filtered=filter==='all'?alumni:alumni.filter(a=>a.type===filter);
+  grid.innerHTML=filtered.map(a=>`
+    <div class="alumni-card">
+      <div class="ac-top"><div class="ac-avatar ${a.avatarClass}">${a.avatar}</div><div class="ac-meta"><div class="ac-gen">[${a.gen}] 수료생</div><div class="ac-name">${a.name}</div></div></div>
+      <div class="ac-body"><h4>${a.title}</h4><p>${a.desc}</p></div>
+      <div class="ac-footer"><span class="ac-company">${a.company}</span><span class="ac-stats">👁 ${a.views} · 👍 ${a.likes}</span></div>
+    </div>
+  `).join('');
+}
+function filterAlumni(type,el){
+  document.querySelectorAll('.af-pill').forEach(p=>p.classList.remove('active'));
+  el.classList.add('active');
+  renderAlumni(type);
+}
+renderAlumni();
+
+// ── Mentor Data ──
+const mentors=[
+  {id:1,type:'resume',name:'김도현',title:'카카오 출신 데이터 과학자',avatarBg:'rgba(59,130,246,0.15)',avatarColor:'var(--blue-400)',initial:'K',available:true,heading:'이력서/포트폴리오 뼈대부터 다시 잡아드립니다',desc:'데이터 직군 서류 탈락의 원인 분석부터 포트폴리오 기획까지 1시간 밀착 피드백을 제공합니다.',tags:['이력서','포트폴리오','데이터분석'],reviews:45,rating:'98%',price:'50,000',unit:'1시간'},
+  {id:2,type:'code',name:'박지훈',title:'네이버 백엔드 개발자',avatarBg:'rgba(20,184,166,0.15)',avatarColor:'var(--teal-400)',initial:'P',available:true,heading:'코딩 테스트 실전 대비 집중 과외',desc:'삼성/카카오 코테 기출 중심, 문제 풀이 전략 + 시간 복잡도 최적화 1:1 코칭.',tags:['코딩테스트','Python','알고리즘'],reviews:62,rating:'99%',price:'60,000',unit:'1시간'},
+  {id:3,type:'study',name:'이서연',title:'라인 데이터 엔지니어 출신',avatarBg:'rgba(139,92,246,0.15)',avatarColor:'var(--purple-400)',initial:'L',available:true,heading:'[4주 완성] 파이썬 데이터 분석 스터디',desc:'매주 토요일 오전, Pandas/NumPy 실전 데이터 분석 과제 + 코드 리뷰. 4~6인 그룹.',tags:['그룹스터디','Pandas','Python'],reviews:28,rating:'97%',price:'120,000',unit:'4주'},
+  {id:4,type:'interview',name:'최민준',title:'쿠팡 데이터 분석가',avatarBg:'rgba(245,158,11,0.15)',avatarColor:'var(--amber-400)',initial:'C',available:false,heading:'데이터 직군 기술 면접 완벽 대비',desc:'실제 면접 기출 100선 기반 모의 면접 + 즉시 피드백. 기술/인성 모두 커버.',tags:['기술면접','모의면접','데이터분석'],reviews:38,rating:'96%',price:'55,000',unit:'1시간'},
+];
+
+function renderMentors(filter='all'){
+  const grid=document.getElementById('mentor-grid');
+  const filtered=filter==='all'?mentors:mentors.filter(m=>m.type===filter);
+  grid.innerHTML=filtered.map(m=>`
+    <div class="mentor-card">
+      <div class="mtr-top">
+        <div class="mtr-profile"><div class="mtr-avatar" style="background:${m.avatarBg};color:${m.avatarColor}">${m.initial}</div><div class="mtr-info"><div class="mtr-name">${m.name} 멘토</div><div class="mtr-title">${m.title}</div></div></div>
+        <span class="mtr-badge ${m.available?'available':'full'}">${m.available?'예약 가능':'예약 마감'}</span>
+      </div>
+      <div class="mtr-body"><h4>${m.heading}</h4><p>${m.desc}</p><div class="mtr-tags">${m.tags.map(t=>`<span>#${t}</span>`).join('')}</div></div>
+      <div class="mtr-footer">
+        <div class="mtr-reviews"><span class="stars">★</span> 만족도 ${m.rating} · 리뷰 ${m.reviews}개</div>
+        <div class="mtr-price-row"><span class="mtr-price">${m.price}원</span><span class="mtr-unit">/ ${m.unit}</span><button class="mtr-book" onclick="openBooking(${m.id})" ${m.available?'':'disabled'}>${m.available?'예약하기':'마감'}</button></div>
+      </div>
+    </div>
+  `).join('');
+}
+function filterMentors(type,el){
+  document.querySelectorAll('.mf-pill').forEach(p=>p.classList.remove('active'));
+  el.classList.add('active');
+  renderMentors(type);
+}
+renderMentors();
+
+// ── Booking Modal ──
+function openBooking(id){
+  const m=mentors.find(x=>x.id===id);
+  const modal=document.getElementById('modal-content');
+  modal.innerHTML=`
+    <div id="booking-form">
+      <h3>멘토링 예약</h3>
+      <p class="modal-sub">${m.name} 멘토 · ${m.heading}</p>
+      <div class="form-group"><label>이름</label><input class="form-input" placeholder="이름을 입력하세요" id="b-name"></div>
+      <div class="form-group"><label>연락처</label><input class="form-input" placeholder="010-0000-0000" id="b-phone"></div>
+      <div class="form-group"><label>희망 날짜</label><select class="form-input" id="b-date"><option value="">날짜를 선택하세요</option><option>2026년 3월 28일 (토)</option><option>2026년 3월 29일 (일)</option><option>2026년 4월 4일 (토)</option><option>2026년 4월 5일 (일)</option></select></div>
+      <div class="form-group"><label>희망 시간</label><div class="time-slots"><button class="time-slot" onclick="selectTime(this)">10:00</button><button class="time-slot" onclick="selectTime(this)">11:00</button><button class="time-slot disabled">14:00</button><button class="time-slot" onclick="selectTime(this)">15:00</button><button class="time-slot" onclick="selectTime(this)">16:00</button><button class="time-slot disabled">19:00</button></div></div>
+      <div class="form-group"><label>상담 내용 (선택)</label><input class="form-input" placeholder="미리 전달할 내용이 있다면 적어주세요" id="b-memo"></div>
+      <div style="padding:16px 0;border-top:1px solid rgba(255,255,255,0.06);display:flex;justify-content:space-between;align-items:center"><span style="font-size:13px;color:var(--slate-400)">결제 금액</span><span style="font-family:var(--font-d);font-size:22px;font-weight:700;color:var(--white)">${m.price}원</span></div>
+      <div class="modal-actions"><button class="modal-btn secondary" onclick="closeModal()">취소</button><button class="modal-btn primary" onclick="confirmBooking('${m.name}')">예약 확정하기</button></div>
+    </div>
+    <div class="modal-confirm" id="booking-confirm"><div class="mc-icon">✅</div><h4>예약이 완료되었습니다!</h4><p>${m.name} 멘토에게 예약 확인 알림이 전송되었습니다.<br>입력하신 연락처로 상세 안내를 보내드립니다.</p><button class="modal-btn primary" onclick="closeModal()" style="width:100%">확인</button></div>
+  `;
+  document.getElementById('booking-modal').classList.add('show');
+}
+function closeModal(){document.getElementById('booking-modal').classList.remove('show')}
+function selectTime(el){
+  el.parentElement.querySelectorAll('.time-slot').forEach(s=>s.classList.remove('selected'));
+  el.classList.add('selected');
+}
+function confirmBooking(name){
+  document.getElementById('booking-form').style.display='none';
+  document.getElementById('booking-confirm').style.display='block';
+}
+</script>
+</body>
+</html>

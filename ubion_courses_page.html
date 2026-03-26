@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>교육과정 | UBION AI 디지털 교육센터</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="common.css">
+<style>
+/* ─── Courses Page Overrides ─── */
+.page-hero::before { background: radial-gradient(circle, rgba(139,92,246,0.1), transparent 70%); }
+.page-hero .sub { color: var(--purple-400); }
+.page-hero h1 .acc { background: linear-gradient(135deg, var(--purple-400), var(--blue-400)); }
+
+/* Filter Bar */
+.filter-bar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 32px; gap: 16px; flex-wrap: wrap; }
+.filter-tabs { display: flex; gap: 6px; }
+.filter-tab { padding: 10px 20px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.08); background: transparent; color: var(--slate-400); font-size: 13px; font-weight: 600; font-family: var(--font-b); cursor: pointer; transition: all .2s; display: flex; align-items: center; gap: 6px; }
+.filter-tab:hover { border-color: rgba(255,255,255,0.15); color: var(--white); }
+.filter-tab.active { background: var(--purple-500); border-color: var(--purple-500); color: var(--white); }
+.filter-tab .count { font-size: 11px; background: rgba(255,255,255,0.15); padding: 2px 7px; border-radius: 10px; font-weight: 700; }
+.filter-tab.active .count { background: rgba(255,255,255,0.25); }
+.filter-selects { display: flex; gap: 10px; }
+.filter-select { padding: 9px 16px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.08); background: var(--navy-800); color: var(--slate-400); font-size: 13px; font-family: var(--font-b); cursor: pointer; appearance: none; background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L5 5L9 1' stroke='%2394A3B8' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; padding-right: 32px; }
+.filter-select:focus { outline: none; border-color: var(--purple-400); }
+
+/* Stats Row */
+.stats-row { display: flex; gap: 16px; margin-bottom: 40px; }
+.stat-pill { display: flex; align-items: center; gap: 8px; padding: 12px 20px; border-radius: 12px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); }
+.stat-pill .sp-num { font-family: var(--font-d); font-size: 20px; font-weight: 700; color: var(--white); }
+.stat-pill .sp-label { font-size: 12px; color: var(--slate-500); }
+
+/* Course List */
+.course-list { display: flex; flex-direction: column; gap: 16px; }
+.course-item { background: var(--navy-800); border: 1px solid rgba(255,255,255,0.06); border-radius: 20px; overflow: hidden; transition: all .3s; cursor: pointer; }
+.course-item:hover { border-color: rgba(255,255,255,0.12); transform: translateY(-2px); }
+.course-item.expanded { border-color: rgba(139,92,246,0.3); }
+.course-summary { display: grid; grid-template-columns: 200px 1fr auto; gap: 0; align-items: stretch; }
+.course-thumb { width: 200px; min-height: 160px; background: var(--navy-700); display: flex; align-items: center; justify-content: center; position: relative; flex-shrink: 0; }
+.course-thumb .thumb-icon { font-size: 40px; opacity: 0.5; }
+.course-thumb .thumb-badge { position: absolute; top: 12px; left: 12px; padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: 700; color: var(--white); }
+.badge-recruiting { background: var(--teal-500); }
+.badge-closing { background: var(--red-500); }
+.badge-upcoming { background: var(--blue-500); }
+.badge-ended { background: var(--slate-500); }
+.course-info { padding: 28px 32px; display: flex; flex-direction: column; justify-content: center; }
+.course-info .ci-type { font-size: 11px; font-weight: 700; letter-spacing: .5px; margin-bottom: 8px; }
+.type-kdigital { color: var(--teal-400); }
+.type-short { color: var(--amber-400); }
+.type-upcoming { color: var(--blue-400); }
+.course-info h3 { font-size: 20px; font-weight: 700; color: var(--white); margin-bottom: 8px; line-height: 1.3; }
+.course-info .ci-desc { font-size: 13px; color: var(--slate-400); line-height: 1.6; margin-bottom: 12px; }
+.course-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+.course-tags span { padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: 600; background: rgba(255,255,255,0.05); color: var(--slate-400); }
+.course-right { padding: 28px; display: flex; flex-direction: column; align-items: flex-end; justify-content: center; gap: 12px; min-width: 200px; border-left: 1px solid rgba(255,255,255,0.04); }
+.course-right .cr-original { font-size: 13px; color: var(--slate-500); text-decoration: line-through; }
+.course-right .cr-price { font-family: var(--font-d); font-size: 24px; font-weight: 700; color: var(--teal-400); }
+.course-right .cr-support { font-size: 11px; color: var(--amber-400); font-weight: 600; }
+.cr-btn { padding: 12px 24px; border-radius: 10px; border: none; font-size: 14px; font-weight: 600; cursor: pointer; font-family: var(--font-b); transition: all .2s; color: var(--white); background: var(--purple-500); }
+.cr-btn:hover { background: var(--purple-400); transform: translateY(-1px); }
+.cr-expand { font-size: 12px; color: var(--slate-500); display: flex; align-items: center; gap: 4px; transition: color .2s; }
+.course-item:hover .cr-expand { color: var(--slate-300); }
+
+/* Course Detail */
+.course-detail { display: none; border-top: 1px solid rgba(255,255,255,0.04); }
+.course-item.expanded .course-detail { display: block; animation: slideDown .4s ease-out; }
+@keyframes slideDown { from { opacity: 0; max-height: 0; } to { opacity: 1; max-height: 1200px; } }
+.detail-inner { padding: 36px 32px; display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+.detail-section { margin-bottom: 28px; }
+.detail-section:last-child { margin-bottom: 0; }
+.detail-section h4 { font-size: 15px; font-weight: 700; color: var(--white); margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
+.detail-section h4 .ds-icon { font-size: 16px; }
+.key-info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.key-info-item { padding: 14px 16px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 10px; }
+.key-info-item .ki-label { font-size: 11px; color: var(--slate-500); margin-bottom: 2px; }
+.key-info-item .ki-value { font-size: 14px; font-weight: 600; color: var(--white); }
+.curri-timeline { position: relative; padding-left: 24px; }
+.curri-timeline::before { content: ''; position: absolute; left: 6px; top: 4px; bottom: 4px; width: 2px; background: rgba(255,255,255,0.06); border-radius: 1px; }
+.curri-step { position: relative; padding-bottom: 16px; }
+.curri-step:last-child { padding-bottom: 0; }
+.curri-step::before { content: ''; position: absolute; left: -20px; top: 6px; width: 10px; height: 10px; border-radius: 50%; border: 2px solid var(--purple-400); background: var(--navy-800); }
+.curri-step .cs-month { font-size: 11px; font-weight: 700; color: var(--purple-400); margin-bottom: 2px; }
+.curri-step .cs-title { font-size: 13px; font-weight: 600; color: var(--white); margin-bottom: 2px; }
+.curri-step .cs-desc { font-size: 12px; color: var(--slate-500); }
+.benefit-list { display: flex; flex-direction: column; gap: 8px; }
+.benefit-item { display: flex; align-items: center; gap: 10px; padding: 10px 14px; background: rgba(20,184,166,0.04); border: 1px solid rgba(20,184,166,0.08); border-radius: 8px; }
+.benefit-item .bi-icon { font-size: 16px; }
+.benefit-item .bi-text { font-size: 13px; color: var(--slate-300); }
+.detail-cta { grid-column: 1/-1; display: flex; align-items: center; justify-content: space-between; padding: 24px 28px; background: linear-gradient(135deg, rgba(139,92,246,0.08), rgba(59,130,246,0.08)); border: 1px solid rgba(139,92,246,0.15); border-radius: 14px; margin-top: 8px; }
+.detail-cta .dc-left h4 { font-size: 16px; font-weight: 700; color: var(--white); margin-bottom: 4px; }
+.detail-cta .dc-left p { font-size: 13px; color: var(--slate-400); }
+.detail-cta .dc-btns { display: flex; gap: 10px; }
+.dc-btn-primary { padding: 13px 28px; border-radius: 10px; border: none; font-size: 14px; font-weight: 600; cursor: pointer; font-family: var(--font-b); background: var(--purple-500); color: var(--white); transition: all .2s; }
+.dc-btn-primary:hover { background: var(--purple-400); }
+.dc-btn-secondary { padding: 13px 28px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.12); background: transparent; font-size: 14px; font-weight: 500; cursor: pointer; font-family: var(--font-b); color: var(--slate-300); transition: all .2s; }
+.dc-btn-secondary:hover { border-color: rgba(255,255,255,0.25); }
+
+/* Timeline */
+.timeline-section { margin-top: 48px; padding-top: 48px; border-top: 1px solid rgba(255,255,255,0.06); }
+.timeline-header { text-align: center; margin-bottom: 36px; }
+.timeline-header h2 { font-family: var(--font-d); font-size: 28px; font-weight: 700; color: var(--white); margin-bottom: 8px; }
+.timeline-header p { font-size: 15px; color: var(--slate-400); }
+.quarter-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; }
+.quarter-card { background: var(--navy-800); border: 1px solid rgba(255,255,255,0.06); border-radius: 16px; padding: 24px 20px; transition: all .3s; }
+.quarter-card:hover { border-color: rgba(255,255,255,0.1); }
+.quarter-card.current { border-color: rgba(139,92,246,0.3); background: rgba(139,92,246,0.04); }
+.qc-label { font-size: 12px; font-weight: 700; letter-spacing: 1px; margin-bottom: 12px; }
+.qc-label.now { color: var(--purple-400); }
+.qc-label.future { color: var(--slate-500); }
+.qc-item { display: flex; align-items: center; gap: 8px; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.04); }
+.qc-item:last-child { border-bottom: none; }
+.qc-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+.qc-dot.open { background: var(--teal-400); }
+.qc-dot.planned { background: var(--slate-500); }
+.qc-item .qc-name { font-size: 12px; color: var(--slate-300); flex: 1; }
+.qc-item .qc-status { font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 4px; }
+.qc-item .qc-status.recruiting { background: rgba(20,184,166,0.1); color: var(--teal-400); }
+.qc-item .qc-status.planned { background: rgba(255,255,255,0.05); color: var(--slate-500); }
+.qc-item .qc-status.closing { background: rgba(239,68,68,0.1); color: var(--red-400); }
+.footer { margin-top: 40px; }
+</style>
+</head>
+<body>
+
+<!-- GNB -->
+<nav class="gnb">
+  <a href="index.html" class="gnb-logo"><em>UBION</em> 디지털 교육센터</a>
+  <ul class="gnb-menu">
+    <li><a href="ubion_start_page.html">시작하기</a></li>
+    <li><a href="ubion_courses_page.html" class="active">교육과정</a></li>
+    <li><a href="ubion_career_page.html">커리어</a></li>
+    <li><a href="ubion_community_page.html">커뮤니티</a></li>
+    <li><a href="ubion_news_center.html">소식·센터</a></li>
+  </ul>
+  <button class="gnb-cta" onclick="location.href='ubion_start_page.html'">무료 진단하기</button>
+</nav>
+
+<!-- Hero -->
+<section class="page-hero">
+  <div class="sub">COURSE CATALOG</div>
+  <h1>전체 <span class="acc">교육 과정</span> 안내</h1>
+  <p>기초부터 실무 포트폴리오 완성까지, 유비온의 맞춤형 커리큘럼을 소개합니다.</p>
+</section>
+
+<!-- Content -->
+<div class="content">
+  <div class="filter-bar">
+    <div class="filter-tabs">
+      <button class="filter-tab active" onclick="filterCourses('all')">전체 <span class="count" id="count-all">5</span></button>
+      <button class="filter-tab" onclick="filterCourses('kdigital')">K-Digital Training <span class="count" id="count-kdigital">2</span></button>
+      <button class="filter-tab" onclick="filterCourses('short')">단기 마스터클래스 <span class="count" id="count-short">2</span></button>
+      <button class="filter-tab" onclick="filterCourses('upcoming')">개설 예정 <span class="count" id="count-upcoming">1</span></button>
+    </div>
+    <div class="filter-selects">
+      <select class="filter-select" onchange="filterByTarget(this.value)">
+        <option value="all">교육 대상</option>
+        <option value="jobseeker">구직자</option>
+        <option value="worker">재직자</option>
+        <option value="all-target">전체 대상</option>
+      </select>
+      <select class="filter-select" onchange="filterByDuration(this.value)">
+        <option value="all">교육 기간</option>
+        <option value="short">4주 이하</option>
+        <option value="mid">1~3개월</option>
+        <option value="long">4개월 이상</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="stats-row">
+    <div class="stat-pill"><span class="sp-num">5</span><span class="sp-label">전체 과정</span></div>
+    <div class="stat-pill"><span class="sp-num" style="color:var(--teal-400)">3</span><span class="sp-label">모집중</span></div>
+    <div class="stat-pill"><span class="sp-num" style="color:var(--red-400)">1</span><span class="sp-label">마감 임박</span></div>
+    <div class="stat-pill"><span class="sp-num" style="color:var(--blue-400)">1</span><span class="sp-label">개설 예정</span></div>
+  </div>
+
+  <div class="course-list" id="course-list"></div>
+
+  <div class="timeline-section">
+    <div class="timeline-header">
+      <h2>📅 전체 커리큘럼 타임라인</h2>
+      <p>분기별 개설 예정 과정을 미리 확인하세요.</p>
+    </div>
+    <div class="quarter-grid">
+      <div class="quarter-card current">
+        <div class="qc-label now">2026 Q1 (현재)</div>
+        <div class="qc-item"><span class="qc-dot open"></span><span class="qc-name">디지털금융 전문가 5기</span><span class="qc-status recruiting">모집중</span></div>
+        <div class="qc-item"><span class="qc-dot open"></span><span class="qc-name">ChatGPT 자동화 마스터</span><span class="qc-status closing">마감임박</span></div>
+        <div class="qc-item"><span class="qc-dot open"></span><span class="qc-name">Python 데이터 분석 입문</span><span class="qc-status recruiting">모집중</span></div>
+      </div>
+      <div class="quarter-card">
+        <div class="qc-label future">2026 Q2</div>
+        <div class="qc-item"><span class="qc-dot planned"></span><span class="qc-name">AI 서비스 개발자 과정</span><span class="qc-status planned">예정</span></div>
+        <div class="qc-item"><span class="qc-dot planned"></span><span class="qc-name">데이터 엔지니어링 부트캠프</span><span class="qc-status planned">예정</span></div>
+        <div class="qc-item"><span class="qc-dot open"></span><span class="qc-name">디지털금융 전문가 6기</span><span class="qc-status recruiting">모집중</span></div>
+      </div>
+      <div class="quarter-card">
+        <div class="qc-label future">2026 Q3</div>
+        <div class="qc-item"><span class="qc-dot planned"></span><span class="qc-name">MLOps 실무 과정</span><span class="qc-status planned">예정</span></div>
+        <div class="qc-item"><span class="qc-dot planned"></span><span class="qc-name">LLM 파인튜닝 심화</span><span class="qc-status planned">예정</span></div>
+      </div>
+      <div class="quarter-card">
+        <div class="qc-label future">2026 Q4</div>
+        <div class="qc-item"><span class="qc-dot planned"></span><span class="qc-name">AI 기획자 과정 (신규)</span><span class="qc-status planned">예정</span></div>
+        <div class="qc-item"><span class="qc-dot planned"></span><span class="qc-name">데이터 시각화 전문가</span><span class="qc-status planned">예정</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Footer -->
+<footer class="footer">
+  <p>© 2026 UBION AI Education Center. All rights reserved. · <a href="#">개인정보처리방침</a> · <a href="#">이용약관</a></p>
+  <p style="margin-top:8px">📍 서울 구로구 디지털로32나길 22 4,5층 · 📞 1588-1381 (평일 09:00~18:00)</p>
+</footer>
+
+<script src="common.js"></script>
+<script>
+const courses = [
+  {
+    id: 1, type: 'kdigital', target: 'jobseeker', duration: 'long',
+    badge: '수시 모집중', badgeClass: 'recruiting', icon: '📊',
+    typeName: 'K-Digital Training', typeClass: 'type-kdigital',
+    title: '빅데이터를 활용한 디지털금융 전문가 과정',
+    desc: '디지털 금융과 데이터 분석 실무 능력을 갖춘 핀테크/마케팅 인재를 양성합니다. 비전공자도 6개월이면 데이터 분석가로 취업할 수 있습니다.',
+    tags: ['#국비지원','#비전공자 환영','#포트폴리오','#취업연계'],
+    originalPrice: '16,298,700원', price: '0원', priceNote: '전액 국비지원',
+    support: '훈련 장려금 최대 월 316,000원 별도 지급',
+    detail: {
+      info: [{label:'교육 기간', value:'6개월 (960시간)'},{label:'교육 대상', value:'구직자 및 재직자'},{label:'모집 인원', value:'25명 (선착순)'},{label:'교육 장소', value:'구로 디지털단지'},{label:'수업 시간', value:'평일 09:30~18:30'},{label:'자격 요건', value:'내일배움카드 소지자'}],
+      curriculum: [{month:'1개월차', title:'Python 기초 & 데이터 수집', desc:'Python 문법, 웹 크롤링, API 활용'},{month:'2개월차', title:'데이터 분석 & 시각화', desc:'Pandas, NumPy, Matplotlib, Seaborn'},{month:'3개월차', title:'SQL & 데이터베이스', desc:'MySQL, 쿼리 최적화, 데이터 모델링'},{month:'4개월차', title:'통계 분석 & 머신러닝', desc:'회귀, 분류, 클러스터링, scikit-learn'},{month:'5개월차', title:'금융 데이터 분석 실무', desc:'시계열 분석, 리스크 모델, 핀테크 사례'},{month:'6개월차', title:'프로젝트 & 포트폴리오', desc:'팀 프로젝트, 발표, 포트폴리오 완성'}],
+      benefits: [{icon:'💰', text:'교육비 전액 무료 (자기부담금 0원)'},{icon:'📝', text:'훈련 장려금 월 최대 316,000원 지급'},{icon:'💼', text:'1:1 전담 매니저 취업 컨설팅'},{icon:'📋', text:'포트폴리오 + 이력서 피드백 지원'},{icon:'🤝', text:'MOU 협력기업 채용 연계'},{icon:'🏢', text:'쾌적한 강의장 + 스터디룸 제공'}]
+    }
+  },
+  {
+    id: 2, type: 'short', target: 'worker', duration: 'short',
+    badge: '마감 임박', badgeClass: 'closing', icon: '🤖',
+    typeName: '단기 마스터클래스', typeClass: 'type-short',
+    title: '생성형 AI (ChatGPT) 업무 자동화 마스터',
+    desc: '비전공자도 엑셀, 파워포인트 대신 AI 프롬프트를 활용해 기획과 보고서를 작성할 수 있습니다.',
+    tags: ['#ChatGPT','#프롬프트 엔지니어링','#업무 자동화','#재직자'],
+    originalPrice: '', price: '내일배움카드', priceNote: '지원 적용시 환급',
+    support: '내일배움카드 소지자 수강료 환급',
+    detail: {
+      info: [{label:'교육 기간', value:'2주 (40시간)'},{label:'교육 대상', value:'재직자 / 직장인'},{label:'모집 인원', value:'20명'},{label:'교육 장소', value:'온라인 + 오프라인'},{label:'수업 시간', value:'평일 19:00~22:00'},{label:'자격 요건', value:'내일배움카드 소지자'}],
+      curriculum: [{month:'1주차', title:'ChatGPT 기본 & 프롬프트 설계', desc:'프롬프트 구조, 역할 부여, Chain-of-Thought'},{month:'1주차', title:'업무 문서 자동 생성', desc:'기획안, 보고서, 이메일 자동 작성 실습'},{month:'2주차', title:'AI 도구 연동 자동화', desc:'Zapier, Make, ChatGPT API 활용'},{month:'2주차', title:'실무 프로젝트 발표', desc:'본인 업무에 적용한 자동화 사례 발표'}],
+      benefits: [{icon:'💳', text:'내일배움카드 지원 적용시 수강료 환급'},{icon:'🌙', text:'야간/주말반 운영 (재직자 배려)'},{icon:'🔧', text:'실무 즉시 적용 가능한 템플릿 제공'},{icon:'📜', text:'수료증 발급'}]
+    }
+  },
+  {
+    id: 3, type: 'kdigital', target: 'jobseeker', duration: 'long',
+    badge: '모집중', badgeClass: 'recruiting', icon: '🧠',
+    typeName: 'K-Digital Training', typeClass: 'type-kdigital',
+    title: 'AI 서비스 개발자 양성 과정',
+    desc: 'Python 기반 웹 개발과 AI 모델 배포까지, 풀스택 AI 서비스 개발자를 양성하는 실무 중심 과정입니다.',
+    tags: ['#국비지원','#풀스택','#AI 배포','#Django'],
+    originalPrice: '14,500,000원', price: '0원', priceNote: '전액 국비지원',
+    support: '훈련 장려금 최대 월 316,000원',
+    detail: {
+      info: [{label:'교육 기간', value:'5개월 (800시간)'},{label:'교육 대상', value:'구직자'},{label:'모집 인원', value:'20명'},{label:'교육 장소', value:'구로 디지털단지'},{label:'수업 시간', value:'평일 09:30~18:30'},{label:'자격 요건', value:'내일배움카드 소지자'}],
+      curriculum: [{month:'1~2개월', title:'Python & 웹 개발 기초', desc:'Flask, Django, REST API 설계'},{month:'3개월', title:'머신러닝 & 딥러닝', desc:'TensorFlow, PyTorch 모델 구축'},{month:'4개월', title:'AI 서비스 배포', desc:'Docker, AWS, CI/CD 파이프라인'},{month:'5개월', title:'팀 프로젝트', desc:'AI 서비스 기획~배포 전체 과정'}],
+      benefits: [{icon:'💰', text:'교육비 전액 무료'},{icon:'📝', text:'훈련 장려금 월 최대 316,000원'},{icon:'💼', text:'취업 컨설팅 + 채용 연계'},{icon:'🚀', text:'AWS 크레딧 제공'}]
+    }
+  },
+  {
+    id: 4, type: 'short', target: 'all-target', duration: 'short',
+    badge: '모집중', badgeClass: 'recruiting', icon: '📈',
+    typeName: '단기 마스터클래스', typeClass: 'type-short',
+    title: 'Python 데이터 분석 입문 (비전공자 특화)',
+    desc: '엑셀만 쓰던 분들을 위한 Python 데이터 분석 첫걸음. 실무 데이터로 배우는 4주 실습 과정.',
+    tags: ['#비전공자','#Python 기초','#실습 중심','#주말반'],
+    originalPrice: '', price: '내일배움카드', priceNote: '지원 적용시 환급',
+    support: '주말반 운영 (재직자 참여 가능)',
+    detail: {
+      info: [{label:'교육 기간', value:'4주 (32시간)'},{label:'교육 대상', value:'전체 대상'},{label:'모집 인원', value:'15명'},{label:'교육 장소', value:'오프라인 (구로)'},{label:'수업 시간', value:'토요일 10:00~18:00'},{label:'자격 요건', value:'코딩 경험 불필요'}],
+      curriculum: [{month:'1주차', title:'Python 기초 문법', desc:'변수, 조건문, 반복문, 함수'},{month:'2주차', title:'Pandas 데이터 다루기', desc:'CSV 읽기, 필터링, 그룹핑'},{month:'3주차', title:'데이터 시각화', desc:'Matplotlib, Seaborn 차트 생성'},{month:'4주차', title:'미니 프로젝트', desc:'실제 공공데이터로 분석 리포트 작성'}],
+      benefits: [{icon:'💳', text:'내일배움카드 지원 가능'},{icon:'📅', text:'주말반 운영 (토요일)'},{icon:'💻', text:'노트북 대여 가능'},{icon:'📜', text:'수료증 발급'}]
+    }
+  },
+  {
+    id: 5, type: 'upcoming', target: 'jobseeker', duration: 'long',
+    badge: '2026 Q2 개설 예정', badgeClass: 'upcoming', icon: '⚙️',
+    typeName: '개설 예정', typeClass: 'type-upcoming',
+    title: '데이터 엔지니어링 부트캠프',
+    desc: 'ETL 파이프라인 구축부터 클라우드 인프라까지, 데이터 엔지니어 커리어를 위한 실무 부트캠프.',
+    tags: ['#국비지원 예정','#ETL','#Spark','#AWS'],
+    originalPrice: '15,000,000원 (예정)', price: '0원 (예정)', priceNote: '국비지원 심사중',
+    support: '2026년 2분기 개설 예정',
+    detail: {
+      info: [{label:'교육 기간', value:'5개월 (예정)'},{label:'교육 대상', value:'구직자'},{label:'모집 인원', value:'미정'},{label:'교육 장소', value:'구로 디지털단지'},{label:'수업 시간', value:'평일 09:30~18:30'},{label:'자격 요건', value:'Python 기초 필요'}],
+      curriculum: [{month:'1~2개월', title:'Python & SQL 심화', desc:'고급 쿼리, 데이터 모델링'},{month:'3개월', title:'ETL & 파이프라인', desc:'Airflow, Spark, Kafka'},{month:'4개월', title:'클라우드 인프라', desc:'AWS, Docker, Kubernetes'},{month:'5개월', title:'프로젝트', desc:'실시간 데이터 파이프라인 구축'}],
+      benefits: [{icon:'📋', text:'국비지원 심사 진행중'},{icon:'📩', text:'사전 알림 신청 가능'},{icon:'🎓', text:'커리큘럼 사전 공개'}]
+    }
+  }
+];
+
+let currentFilter = 'all';
+let currentTarget = 'all';
+let currentDuration = 'all';
+
+function renderCourses() {
+  const list = document.getElementById('course-list');
+  const filtered = courses.filter(c => {
+    if (currentFilter !== 'all' && c.type !== currentFilter) return false;
+    if (currentTarget !== 'all' && c.target !== currentTarget) return false;
+    if (currentDuration !== 'all' && c.duration !== currentDuration) return false;
+    return true;
+  });
+
+  list.innerHTML = filtered.map(c => `
+    <div class="course-item" id="course-${c.id}" onclick="toggleCourse(${c.id})">
+      <div class="course-summary">
+        <div class="course-thumb">
+          <span class="thumb-icon">${c.icon}</span>
+          <span class="thumb-badge badge-${c.badgeClass}">${c.badge}</span>
+        </div>
+        <div class="course-info">
+          <div class="ci-type ${c.typeClass}">${c.typeName}</div>
+          <h3>${c.title}</h3>
+          <p class="ci-desc">${c.desc}</p>
+          <div class="course-tags">${c.tags.map(t=>`<span>${t}</span>`).join('')}</div>
+        </div>
+        <div class="course-right">
+          ${c.originalPrice ? `<span class="cr-original">${c.originalPrice}</span>` : ''}
+          <span class="cr-price">${c.price}</span>
+          <span class="cr-support">${c.priceNote}</span>
+          <button class="cr-btn" onclick="event.stopPropagation()">수강신청</button>
+          <span class="cr-expand">상세보기 ▾</span>
+        </div>
+      </div>
+      <div class="course-detail">
+        <div class="detail-inner">
+          <div>
+            <div class="detail-section">
+              <h4><span class="ds-icon">📋</span> 과정 기본 정보</h4>
+              <div class="key-info-grid">
+                ${c.detail.info.map(i=>`<div class="key-info-item"><div class="ki-label">${i.label}</div><div class="ki-value">${i.value}</div></div>`).join('')}
+              </div>
+            </div>
+            <div class="detail-section">
+              <h4><span class="ds-icon">🎁</span> 지원 혜택</h4>
+              <div class="benefit-list">
+                ${c.detail.benefits.map(b=>`<div class="benefit-item"><span class="bi-icon">${b.icon}</span><span class="bi-text">${b.text}</span></div>`).join('')}
+              </div>
+            </div>
+          </div>
+          <div>
+            <div class="detail-section">
+              <h4><span class="ds-icon">📚</span> 커리큘럼</h4>
+              <div class="curri-timeline">
+                ${c.detail.curriculum.map(s=>`<div class="curri-step"><div class="cs-month">${s.month}</div><div class="cs-title">${s.title}</div><div class="cs-desc">${s.desc}</div></div>`).join('')}
+              </div>
+            </div>
+          </div>
+          <div class="detail-cta">
+            <div class="dc-left">
+              <h4>${c.type==='upcoming'?'사전 알림을 받아보세요':'지금 바로 수강 신청하세요'}</h4>
+              <p>${c.support}</p>
+            </div>
+            <div class="dc-btns">
+              <button class="dc-btn-primary" onclick="event.stopPropagation()">${c.type==='upcoming'?'사전 알림 신청':'수강신청 하러가기'}</button>
+              <button class="dc-btn-secondary" onclick="event.stopPropagation()">상담 문의</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  `).join('');
+
+  if (filtered.length === 0) {
+    list.innerHTML = `<div style="text-align:center;padding:80px 20px;color:var(--slate-500)"><div style="font-size:48px;margin-bottom:16px;opacity:0.3">🔍</div><div style="font-size:16px;margin-bottom:8px;color:var(--white)">조건에 맞는 과정이 없습니다</div><div style="font-size:14px">필터를 변경하거나 전체 과정을 확인해 보세요.</div></div>`;
+  }
+}
+
+function filterCourses(type) {
+  currentFilter = type;
+  document.querySelectorAll('.filter-tab').forEach(t => {
+    const isMatch = (type==='all' && t.textContent.includes('전체')) ||
+                    (type==='kdigital' && t.textContent.includes('K-Digital')) ||
+                    (type==='short' && t.textContent.includes('단기')) ||
+                    (type==='upcoming' && t.textContent.includes('개설'));
+    t.classList.toggle('active', isMatch);
+  });
+  renderCourses();
+}
+
+function filterByTarget(val) { currentTarget = val; renderCourses(); }
+function filterByDuration(val) { currentDuration = val; renderCourses(); }
+
+function toggleCourse(id) {
+  const el = document.getElementById('course-' + id);
+  const wasExpanded = el.classList.contains('expanded');
+  document.querySelectorAll('.course-item').forEach(c => c.classList.remove('expanded'));
+  if (!wasExpanded) {
+    el.classList.add('expanded');
+    setTimeout(() => { el.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }, 100);
+  }
+}
+
+renderCourses();
+</script>
+</body>
+</html>
