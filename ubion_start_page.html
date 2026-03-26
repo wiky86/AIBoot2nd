@@ -114,6 +114,62 @@
 .tc-action { flex-shrink: 0; }
 .tc-btn { padding: 10px 20px; border-radius: 8px; border: none; font-size: 13px; font-weight: 600; cursor: pointer; font-family: var(--font-b); transition: all .2s; color: var(--white); }
 .tc-btn:hover { transform: translateY(-1px); }
+
+/* ─── Learning Style (MBTI-style) ─── */
+.ls-intro { text-align: center; max-width: 640px; margin: 0 auto; }
+.ls-provoke { display: inline-block; padding: 10px 24px; border-radius: 100px; background: linear-gradient(135deg, rgba(239,68,68,0.12), rgba(245,158,11,0.12)); border: 1px solid rgba(239,68,68,0.2); font-size: 14px; font-weight: 700; color: var(--red-400); margin-bottom: 24px; animation: pulse 3s infinite; }
+.ls-intro h2 { font-family: var(--font-d); font-size: 28px; font-weight: 700; color: var(--white); margin-bottom: 12px; line-height: 1.4; }
+.ls-intro h2 .fire { background: linear-gradient(135deg, #EF4444, #F59E0B); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.ls-intro > p { font-size: 15px; color: var(--slate-400); margin-bottom: 32px; line-height: 1.6; }
+.ls-start-btn { padding: 18px 48px; border-radius: 14px; border: none; background: linear-gradient(135deg, #EF4444, #F59E0B); color: var(--white); font-size: 17px; font-weight: 700; cursor: pointer; font-family: var(--font-b); transition: all .3s; box-shadow: 0 8px 32px rgba(239,68,68,0.3); }
+.ls-start-btn:hover { transform: translateY(-2px) scale(1.02); box-shadow: 0 12px 40px rgba(239,68,68,0.4); }
+.ls-badge-row { display: flex; justify-content: center; gap: 8px; margin-bottom: 24px; flex-wrap: wrap; }
+.ls-badge-item { padding: 6px 14px; border-radius: 8px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.06); font-size: 12px; color: var(--slate-400); font-weight: 500; }
+
+.ls-quiz { display: none; max-width: 680px; margin: 0 auto; }
+.ls-quiz.show { display: block; animation: fadeUp .5s ease-out; }
+.ls-progress { display: flex; gap: 3px; margin-bottom: 12px; }
+.ls-progress-bar { flex: 1; height: 6px; border-radius: 3px; background: rgba(255,255,255,0.06); overflow: hidden; }
+.ls-progress-fill { height: 100%; border-radius: 3px; background: linear-gradient(90deg, #EF4444, #F59E0B); transition: width .4s ease; width: 0; }
+.ls-axis-label { font-size: 12px; font-weight: 600; color: var(--amber-400); letter-spacing: 1px; margin-bottom: 24px; text-align: center; }
+.ls-q-card { background: var(--navy-800); border: 1px solid rgba(255,255,255,0.06); border-radius: 20px; padding: 40px 36px; }
+.ls-q-num { font-size: 12px; color: var(--slate-500); font-weight: 600; margin-bottom: 8px; }
+.ls-q-text { font-family: var(--font-d); font-size: 20px; font-weight: 700; color: var(--white); margin-bottom: 28px; line-height: 1.5; }
+.ls-choices { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.ls-choice { padding: 24px 20px; border: 2px solid rgba(255,255,255,0.06); border-radius: 16px; background: transparent; cursor: pointer; transition: all .3s; text-align: center; }
+.ls-choice:hover { border-color: rgba(255,255,255,0.15); background: rgba(255,255,255,0.02); transform: translateY(-2px); }
+.ls-choice.selected { border-color: var(--amber-500); background: rgba(245,158,11,0.06); box-shadow: 0 4px 20px rgba(245,158,11,0.15); transform: translateY(-3px); }
+.ls-choice-emoji { font-size: 32px; margin-bottom: 12px; display: block; }
+.ls-choice-title { font-size: 15px; font-weight: 700; color: var(--white); margin-bottom: 6px; font-family: var(--font-b); }
+.ls-choice-desc { font-size: 12px; color: var(--slate-500); line-height: 1.5; font-family: var(--font-b); }
+.ls-vs { display: flex; align-items: center; justify-content: center; font-family: var(--font-d); font-size: 18px; font-weight: 700; color: var(--red-400); padding: 0 8px; }
+
+.ls-result { display: none; text-align: center; max-width: 680px; margin: 0 auto; }
+.ls-result.show { display: block; animation: fadeUp .6s ease-out; }
+.ls-result-badge { display: inline-block; padding: 8px 20px; border-radius: 100px; background: rgba(245,158,11,0.1); border: 1px solid rgba(245,158,11,0.2); font-size: 13px; font-weight: 600; color: var(--amber-400); margin-bottom: 20px; }
+.ls-type-reveal { margin-bottom: 24px; }
+.ls-type-letters { display: flex; justify-content: center; gap: 10px; margin-bottom: 16px; }
+.ls-letter { width: 72px; height: 72px; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-family: var(--font-d); font-size: 36px; font-weight: 700; color: var(--white); animation: letterPop .5s ease-out both; }
+.ls-letter:nth-child(1) { background: linear-gradient(135deg, #EF4444, #F97316); animation-delay: .1s; }
+.ls-letter:nth-child(2) { background: linear-gradient(135deg, #F59E0B, #FBBF24); animation-delay: .3s; }
+.ls-letter:nth-child(3) { background: linear-gradient(135deg, #3B82F6, #60A5FA); animation-delay: .5s; }
+.ls-letter:nth-child(4) { background: linear-gradient(135deg, #8B5CF6, #A78BFA); animation-delay: .7s; }
+@keyframes letterPop { from { opacity:0; transform:scale(0) rotateY(180deg); } to { opacity:1; transform:scale(1) rotateY(0); } }
+.ls-type-name { font-family: var(--font-d); font-size: 28px; font-weight: 700; color: var(--white); margin-bottom: 8px; }
+.ls-type-desc { font-size: 15px; color: var(--slate-400); line-height: 1.7; margin-bottom: 32px; max-width: 560px; margin-left: auto; margin-right: auto; }
+.ls-axes-detail { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 32px; text-align: left; }
+.ls-axis-card { padding: 18px 20px; border-radius: 14px; background: var(--navy-800); border: 1px solid rgba(255,255,255,0.06); }
+.ls-axis-card .la-label { font-size: 11px; font-weight: 700; letter-spacing: .5px; margin-bottom: 6px; }
+.ls-axis-card .la-type { font-size: 15px; font-weight: 700; color: var(--white); margin-bottom: 4px; }
+.ls-axis-card .la-desc { font-size: 12px; color: var(--slate-500); line-height: 1.5; }
+.ls-recommend { background: linear-gradient(135deg, rgba(245,158,11,0.06), rgba(239,68,68,0.06)); border: 1px solid rgba(245,158,11,0.15); border-radius: 16px; padding: 28px; text-align: left; margin-bottom: 24px; }
+.ls-recommend h4 { font-size: 16px; font-weight: 700; color: var(--white); margin-bottom: 8px; }
+.ls-recommend p { font-size: 13px; color: var(--slate-400); line-height: 1.6; }
+.ls-share-row { display: flex; justify-content: center; gap: 12px; margin-top: 20px; }
+.ls-share-btn { padding: 12px 24px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1); background: transparent; color: var(--slate-300); font-size: 14px; font-weight: 500; cursor: pointer; font-family: var(--font-b); transition: all .2s; }
+.ls-share-btn:hover { border-color: rgba(255,255,255,0.2); color: var(--white); }
+.ls-share-btn.primary { background: linear-gradient(135deg, #EF4444, #F59E0B); border: none; color: var(--white); font-weight: 600; }
+.ls-share-btn.primary:hover { transform: translateY(-1px); box-shadow: 0 6px 24px rgba(239,68,68,0.3); }
 </style>
 </head>
 <body>
@@ -143,6 +199,7 @@
   <button class="tab-btn active" onclick="switchTab(0)"><span class="tab-icon">🌳</span> 스킬트리 자가진단</button>
   <button class="tab-btn" onclick="switchTab(1)"><span class="tab-icon">⚡</span> 1분 퀵 진단</button>
   <button class="tab-btn" onclick="switchTab(2)"><span class="tab-icon">🎯</span> 대상별 맞춤 추천</button>
+  <button class="tab-btn" onclick="switchTab(3)" style="border-color:rgba(239,68,68,0.2);background:rgba(239,68,68,0.04)"><span class="tab-icon">🧬</span> 학습 스타일 진단</button>
 </div>
 
 <!-- ═══ TAB 1: Skill Tree ═══ -->
@@ -206,6 +263,32 @@
     </div>
   </div>
   <div id="target-details"></div>
+</div>
+
+<!-- ═══ TAB 4: Learning Style (MBTI) ═══ -->
+<div class="tab-panel" id="panel-3">
+  <!-- Intro -->
+  <div class="ls-intro" id="ls-intro">
+    <div class="ls-provoke">🔥 MBTI에는 그렇게 공을 들이면서, 역량 진단에는 5분도 못 쓴다고?</div>
+    <h2>당신의 <span class="fire">학습 DNA</span>를 해부합니다.</h2>
+    <p>12개 질문, 4개 축, 16가지 유형.<br>MBTI처럼 4글자 코드로 나만의 학습 스타일을 찾아보세요.<br>이걸 모르면 아무리 좋은 강의도 <strong style="color:var(--white)">절반만 흡수</strong>됩니다.</p>
+    <div class="ls-badge-row">
+      <span class="ls-badge-item">📊 정보 습득 방식</span>
+      <span class="ls-badge-item">⏱ 학습 리듬</span>
+      <span class="ls-badge-item">👥 학습 환경</span>
+      <span class="ls-badge-item">🎯 지식 활용</span>
+    </div>
+    <button class="ls-start-btn" onclick="startLSQuiz()">나의 학습 유형 알아보기 →</button>
+    <p style="font-size:12px;color:var(--slate-500);margin-top:16px">⏱ 약 3분 소요 · 결과 즉시 확인</p>
+  </div>
+  <!-- Quiz -->
+  <div class="ls-quiz" id="ls-quiz">
+    <div class="ls-progress"><div class="ls-progress-bar"><div class="ls-progress-fill" id="ls-progress"></div></div></div>
+    <div class="ls-axis-label" id="ls-axis-label"></div>
+    <div class="ls-q-card" id="ls-q-card"></div>
+  </div>
+  <!-- Result -->
+  <div class="ls-result" id="ls-result"></div>
 </div>
 
 <!-- Footer -->
@@ -512,6 +595,163 @@ function pickTarget(idx) {
       </div>
     </div>
   `;
+}
+
+// ─── LEARNING STYLE DIAGNOSTIC ───
+const lsQuestions = [
+  // Axis 0: V(Visual) vs L(Logical)
+  {axis:0, q:'새로운 개념을 처음 접할 때, 당신은?', a:{emoji:'🎨',title:'그림으로 보여줘',desc:'다이어그램, 인포그래픽, 영상으로 한눈에 파악'}, b:{emoji:'📐',title:'논리로 설명해줘',desc:'수식, 코드, 논리적 흐름으로 단계적 이해'}},
+  {axis:0, q:'데이터 분석 결과를 확인할 때 먼저 보는 것은?', a:{emoji:'📊',title:'차트부터',desc:'시각화된 그래프를 먼저 보고 전체 흐름 파악'}, b:{emoji:'🔢',title:'수치부터',desc:'평균, 표준편차, p-value 등 수치를 먼저 확인'}},
+  {axis:0, q:'누군가에게 설명할 때 선호하는 방식은?', a:{emoji:'🖼️',title:'화이트보드에 그림',desc:'도식, 화살표, 색깔로 시각적으로 전달'}, b:{emoji:'📝',title:'논리적 글',desc:'1번, 2번, 3번... 체계적 문서로 전달'}},
+  // Axis 1: I(Intensive) vs C(Consistent)
+  {axis:1, q:'시험 공부할 때 당신의 리얼 스타일은?', a:{emoji:'🌙',title:'3일 밤새우기',desc:'벼락치기의 왕. 마감 전 초집중 모드 돌입'}, b:{emoji:'📅',title:'한 달 전부터 매일',desc:'하루 1시간씩 꾸준히. 습관이 실력이다'}},
+  {axis:1, q:'새 프로그래밍 언어를 배운다면?', a:{emoji:'🔥',title:'주말에 12시간 올인',desc:'일단 기초 끝내고 본다. 몰입이 핵심'}, b:{emoji:'☕',title:'매일 30분씩 2주',desc:'조금씩 꾸준히. 복습이 진짜 실력'}},
+  {axis:1, q:'온라인 강의를 들을 때?', a:{emoji:'📺',title:'넷플릭스 정주행',desc:'한 번 시작하면 끝까지 몰아본다'}, b:{emoji:'🎧',title:'하루 한 강씩',desc:'매일 한 강, 복습하며 천천히 소화'}},
+  // Axis 2: S(Social) vs A(Autonomous)
+  {axis:2, q:'프로젝트를 진행할 때 당신은?', a:{emoji:'🤝',title:'팀이 최고',desc:'역할 분담하고 함께 해결. 시너지가 핵심'}, b:{emoji:'🐺',title:'나 혼자 간다',desc:'A to Z 모두 내가 컨트롤. 속도와 퀄리티 보장'}},
+  {axis:2, q:'모르는 개념이 나왔을 때?', a:{emoji:'💬',title:'바로 질문',desc:'스터디 그룹, 커뮤니티, 동료에게 즉시 물어봄'}, b:{emoji:'🔍',title:'혼자 파기',desc:'공식 문서, Stack Overflow 탐색. 스스로 해결'}},
+  {axis:2, q:'이상적인 공부 환경은?', a:{emoji:'🏢',title:'카페·스터디룸',desc:'주변에 사람이 있어야 집중이 된다'}, b:{emoji:'🏠',title:'내 방·1인 공간',desc:'조용한 나만의 공간에서 완전 몰입'}},
+  // Axis 3: P(Practical) vs R(Research)
+  {axis:3, q:'새로운 기술을 배울 때 먼저 하는 것은?', a:{emoji:'🚀',title:'일단 코드부터',desc:'Hello World 찍고, 에러 만나면서 배운다'}, b:{emoji:'📚',title:'원리부터 이해',desc:'공식 문서 정독, 개념 완벽히 파악 후 코딩'}},
+  {axis:3, q:'분석 결과를 보고할 때 당신의 스타일은?', a:{emoji:'💡',title:'"바로 적용하면..."',desc:'비즈니스 임팩트 중심. 실행 가능한 액션 제시'}, b:{emoji:'🔬',title:'"통계적으로 보면..."',desc:'검증과 근거 중심. 논문급 분석 리포트'}},
+  {axis:3, q:'코딩하면서 가장 짜릿한 순간은?', a:{emoji:'⚡',title:'내 코드가 돌아갈 때',desc:'결과물이 실제로 작동하는 그 순간!'}, b:{emoji:'🧠',title:'알고리즘을 이해한 순간',desc:'"아, 이래서 이렇게 되는구나!" 깨달음의 쾌감'}}
+];
+
+const lsTypeNames = {
+  'VISP':'🚀 번개 크리에이터', 'VISR':'🔬 인사이트 헌터', 'VIAP':'⚡ 원맨 아미', 'VIAR':'🎨 디지털 탐험가',
+  'VCSP':'🌊 스테디 팀플레이어', 'VCSR':'📊 데이터 스토리텔러', 'VCAP':'🧱 묵묵한 빌더', 'VCAR':'🎯 끈기의 연구자',
+  'LISP':'⚙️ 스프린트 전략가', 'LISR':'🧪 실험실 과학자', 'LIAP':'💻 해커 타입', 'LIAR':'🧠 씽킹 머신',
+  'LCSP':'🤝 애자일 마스터', 'LCSR':'📚 지식 큐레이터', 'LCAP':'🔧 장인 개발자', 'LCAR':'🏆 학술 마스터'
+};
+const lsTypeDescs = {
+  'VISP':'시각적으로 빠르게 흡수하고, 팀과 함께 몰입해서 바로 실전에 적용하는 타입. 해커톤의 에이스, 스타트업의 핵심 인재.',
+  'VISR':'시각적 감각에 몰입력까지 갖춘 연구형. 팀에서 깊이 있는 인사이트를 뽑아내는 다크호스.',
+  'VIAP':'"나 혼자 다 한다." 시각적 직관으로 빠르게 파악하고 혼자서 돌파하는 원맨 아미.',
+  'VIAR':'시각적 감각과 탐구심이 만난 디지털 아티스트. 데이터 시각화나 UX 분석에서 강점 발휘.',
+  'VCSP':'꾸준한 노력 + 팀워크 + 실전. 가장 안정적인 성과를 내는 팀 플레이어.',
+  'VCSR':'팀과 함께 꾸준히 깊이를 파는 타입. 장기 연구 프로젝트의 핵심 멤버.',
+  'VCAP':'묵묵히 혼자서 꾸준히 만들어가는 타입. 사이드 프로젝트를 완성하는 진짜 빌더.',
+  'VCAR':'시각적 감각으로 꾸준히 독립 연구를 파는 끈기의 소유자.',
+  'LISP':'논리적 사고 + 몰입 + 팀 + 실전. 전략적으로 팀을 이끌며 빠르게 결과를 만드는 리더.',
+  'LISR':'논리적으로 몰입해서 팀과 함께 실험하고 검증하는 과학자 타입.',
+  'LIAP':'논리적으로 혼자 몰입해서 코드로 증명하는 해커. "일단 돌아가게 만들고 본다."',
+  'LIAR':'논리적 사고로 혼자 깊이 파고드는 이론가. 알고리즘과 수학적 모델링의 달인.',
+  'LCSP':'논리적이고 꾸준하며 팀과 함께 실전 적용까지. 현업에서 가장 사랑받는 타입.',
+  'LCSR':'매일 조금씩, 팀과 함께, 깊이 있게. 지식을 큐레이팅하고 공유하는 멘토 기질.',
+  'LCAP':'논리적으로 꾸준히 혼자 코딩하는 장인. 클린 코드와 완성도에 집착하는 개발자.',
+  'LCAR':'논리 + 꾸준 + 독립 + 탐구. 연구자의 정석. 석·박사 과정에 최적화된 학습 스타일.'
+};
+const lsAxisNames = [['📊 정보 습득','V','시각형 (Visual)','L','논리형 (Logical)'],['⏱ 학습 리듬','I','몰입형 (Intensive)','C','꾸준형 (Consistent)'],['👥 학습 환경','S','소셜형 (Social)','A','자립형 (Autonomous)'],['🎯 지식 활용','P','실전형 (Practical)','R','탐구형 (Research)']];
+const lsAxisColors = ['var(--red-400)','var(--amber-400)','var(--blue-400)','var(--purple-400)'];
+
+let lsScores = [0,0,0,0]; // positive = first option (V,I,S,P)
+let lsStep = 0;
+
+function startLSQuiz() {
+  document.getElementById('ls-intro').style.display = 'none';
+  document.getElementById('ls-quiz').classList.add('show');
+  lsScores = [0,0,0,0]; lsStep = 0;
+  renderLSQuestion();
+}
+
+function renderLSQuestion() {
+  const q = lsQuestions[lsStep];
+  const axisLabels = ['AXIS 1: 정보 습득 방식','AXIS 2: 학습 리듬','AXIS 3: 학습 환경','AXIS 4: 지식 활용'];
+  document.getElementById('ls-progress').style.width = ((lsStep)/12*100)+'%';
+  document.getElementById('ls-axis-label').textContent = axisLabels[q.axis];
+  document.getElementById('ls-axis-label').style.color = lsAxisColors[q.axis];
+  document.getElementById('ls-q-card').innerHTML = `
+    <div class="ls-q-num">Q${lsStep+1} / 12</div>
+    <div class="ls-q-text">${q.q}</div>
+    <div class="ls-choices">
+      <button class="ls-choice" onclick="answerLS('a')">
+        <span class="ls-choice-emoji">${q.a.emoji}</span>
+        <div class="ls-choice-title">${q.a.title}</div>
+        <div class="ls-choice-desc">${q.a.desc}</div>
+      </button>
+      <button class="ls-choice" onclick="answerLS('b')">
+        <span class="ls-choice-emoji">${q.b.emoji}</span>
+        <div class="ls-choice-title">${q.b.title}</div>
+        <div class="ls-choice-desc">${q.b.desc}</div>
+      </button>
+    </div>
+  `;
+}
+
+function answerLS(choice) {
+  const q = lsQuestions[lsStep];
+  if (choice === 'a') lsScores[q.axis]++; else lsScores[q.axis]--;
+  // Visual feedback
+  const btns = document.querySelectorAll('.ls-choice');
+  btns[choice==='a'?0:1].classList.add('selected');
+  setTimeout(() => {
+    lsStep++;
+    if (lsStep >= 12) { showLSResult(); return; }
+    renderLSQuestion();
+  }, 400);
+}
+
+function showLSResult() {
+  document.getElementById('ls-quiz').classList.remove('show');
+  document.getElementById('ls-quiz').style.display = 'none';
+  const type = (lsScores[0]>=0?'V':'L') + (lsScores[1]>=0?'I':'C') + (lsScores[2]>=0?'S':'A') + (lsScores[3]>=0?'P':'R');
+  const letters = type.split('');
+  const axes = lsAxisNames.map((a,i) => ({
+    label: a[0], color: lsAxisColors[i],
+    type: lsScores[i]>=0 ? a[2] : a[4],
+    letter: lsScores[i]>=0 ? a[1] : a[3],
+    strength: Math.abs(lsScores[i])
+  }));
+  const r = document.getElementById('ls-result');
+  r.innerHTML = `
+    <div class="ls-result-badge">🧬 나의 학습 DNA 분석 완료</div>
+    <div class="ls-type-reveal">
+      <div class="ls-type-letters">
+        ${letters.map(l => `<div class="ls-letter">${l}</div>`).join('')}
+      </div>
+      <div class="ls-type-name">${lsTypeNames[type]||type}</div>
+      <div class="ls-type-desc">${lsTypeDescs[type]||''}</div>
+    </div>
+    <div class="ls-axes-detail">
+      ${axes.map(a => `
+        <div class="ls-axis-card">
+          <div class="la-label" style="color:${a.color}">${a.label}</div>
+          <div class="la-type">${a.letter} — ${a.type}</div>
+          <div class="la-desc">성향 강도: ${'■'.repeat(a.strength)}${'□'.repeat(3-a.strength)}</div>
+        </div>
+      `).join('')}
+    </div>
+    <div class="ls-recommend">
+      <h4>📌 ${type} 유형에게 추천하는 학습 전략</h4>
+      <p>${getLSAdvice(type)}</p>
+    </div>
+    <div class="ls-share-row">
+      <button class="ls-share-btn primary" onclick="location.href='ubion_courses_page.html'">나에게 맞는 과정 보러가기 →</button>
+      <button class="ls-share-btn" onclick="resetLS()">↻ 다시 진단하기</button>
+    </div>
+  `;
+  r.classList.add('show');
+  document.getElementById('ls-progress').style.width = '100%';
+}
+
+function getLSAdvice(type) {
+  const v = type[0]==='V', i = type[1]==='I', s = type[2]==='S', p = type[3]==='P';
+  let advice = '';
+  advice += v ? '시각적 자료(영상 강의, 인포그래픽, 차트)가 포함된 과정을 선택하세요. ' : '텍스트 기반 교재와 논리적 구조의 커리큘럼이 맞습니다. ';
+  advice += i ? '단기 집중 과정(부트캠프, 마스터클래스)이 학습 효율이 높습니다. ' : '6개월 장기 과정에서 매일 꾸준히 학습하는 것이 최적입니다. ';
+  advice += s ? '팀 프로젝트, 스터디 그룹, 멘토링이 있는 과정을 적극 활용하세요. ' : '자습 시간이 충분하고, 1:1 코드 리뷰를 활용할 수 있는 과정이 좋습니다. ';
+  advice += p ? '실전 프로젝트 비중이 높고, 포트폴리오 완성을 목표로 하는 과정을 추천합니다.' : '이론 심화 + 논문 리뷰 + 알고리즘 분석이 포함된 과정이 적합합니다.';
+  return advice;
+}
+
+function resetLS() {
+  document.getElementById('ls-result').classList.remove('show');
+  document.getElementById('ls-result').style.display = 'none';
+  document.getElementById('ls-result').innerHTML = '';
+  document.getElementById('ls-intro').style.display = '';
+  document.getElementById('ls-quiz').style.display = '';
+  document.getElementById('ls-quiz').classList.remove('show');
+  document.getElementById('ls-progress').style.width = '0%';
 }
 </script>
 </body>
